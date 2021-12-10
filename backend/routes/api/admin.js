@@ -443,7 +443,7 @@ router.route('/course/delete').post(cors(corsOptions), auth.isAuthenticated, (re
         let id = req.query.id;
         let courseName = req.body.course;
         // get lessons count
-        Lessons.countDocuments({course: id}).then(async data1 => {
+        Lessons.countDocuments({course: {$eq: id}}).then(async data1 => {
             //res.json(data1)
             if (data1 > 0) {
                 console.log("Deletion aborted due to remaining lessons");
@@ -451,7 +451,7 @@ router.route('/course/delete').post(cors(corsOptions), auth.isAuthenticated, (re
                 await Assign.deleteMany({course: {$eq: id}}).then(async data7 => {
 
                     await Payments.updateMany({course: {$eq: id}}, {
-                        course: String(courseName),
+                        course: String({$eq: courseName}),
                         status: 4
                     }).then(async data3 => {
                         // delete course
@@ -639,7 +639,7 @@ router.route('/lessons/last').get(cors(corsOptions), auth.isAuthenticated, (req,
 router.route('/lessons/count').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let course = req.query.id;
-        Lessons.countDocuments({course: course}).then(data => {
+        Lessons.countDocuments({course: {$eq: course}}).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -680,7 +680,7 @@ router.route('/lesson/update').post(cors(corsOptions), auth.isAuthenticated, (re
         let lesson = req.body.lesson;
         let position = req.body.position;
 
-        Lessons.updateOne({_id: {$eq: id}}, {lesson: lesson, position: position}, (error, data) => {
+        Lessons.updateOne({_id: {$eq: id}}, {lesson: {$eq: lesson}, position: {$eq: position}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -749,7 +749,7 @@ router.route('/topics/new').post(cors(corsOptions), auth.isAuthenticated, async 
                         console.log("Last position: " + lastPosition);
                         for (let i = lastPosition; i >= position; i--) {
                             console.log("Before - Position: " + position + ", lastPosition: " + lastPosition + ", i: " + i)
-                            await Topics.updateOne({course: {$eq: course}, lesson: id, position: i}, {
+                            await Topics.updateOne({course: {$eq: course}, lesson: {$eq: id}, position: {$eq: i}}, {
                                 position: i + 1
                             }).then(async res3 => {
                                 //console.log(data);
@@ -927,7 +927,7 @@ router.route('/topic/update').post(cors(corsOptions), auth.isAuthenticated, (req
         let video = videoCompiledUrl;
         let position = req.body.position;
 
-        Topics.updateOne({_id: id}, {topic: {$eq: topic}, video: {$eq: video}, position: {$eq: position}}, (error, data) => {
+        Topics.updateOne({_id: {$eq: id}}, {topic: {$eq: topic}, video: {$eq: video}, position: {$eq: position}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -1862,8 +1862,8 @@ router.route('/users/edit').post(cors(corsOptions), auth.isAuthenticated, (req, 
 
         let id = req.body.id;
         User.updateOne({_id: {$eq: id}}, {
-            name: req.body.name,
-            tel: req.body.tel
+            name: {$eq: req.body.name},
+            tel: {$eq: req.body.tel}
         }).then(async data1 => {
             res.status(200).json(data1);
         }).catch(err1 => {

@@ -182,7 +182,7 @@ router.route('/course/delete').post(cors(corsOptions), auth.isAuthenticated, (re
         let id = req.query.id;
         let courseName = req.body.course;
         // get lessons count
-        Lessons.countDocuments({course: id}).then(async data1 => {
+        Lessons.countDocuments({course: {$eq: id}}).then(async data1 => {
             //res.json(data1)
             if (data1 > 0) {
                 console.log("Deletion aborted due to remaining lessons");
@@ -390,7 +390,7 @@ router.route('/lessons/last').get(cors(corsOptions), auth.isAuthenticated, (req,
 router.route('/lessons/count').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 2) {
         let course = req.query.id;
-        Lessons.countDocuments({course: course}).then(data => {
+        Lessons.countDocuments({course: {$eq: course}}).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
