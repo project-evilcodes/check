@@ -22,8 +22,8 @@ module.exports = {
 
     MAIL_HOST: process.env.MAIL_HOST,
     MAIL_PORT: process.env.MAIL_PORT,
-    MAIL_SECURE: process.env.MAIL_SECURE,
-    MAIL_TLS: process.env.MAIL_TLS,
+    MAIL_SECURE: false,
+    MAIL_TLS: true,
     MAIL_ACC: process.env.MAIL_ACC,
     MAIL_PW: process.env.MAIL_PW,
 };
