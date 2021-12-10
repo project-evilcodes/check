@@ -200,7 +200,7 @@ router.route('/past/delete').post(cors(corsOptions), auth.isAuthenticated, async
             return res.status(404).json({internalError: "Unexpected error occurred! Please try again."});
         }
 
-        await Past.findOne({_id: id}).then(async data0 => {
+        await Past.findOne({_id: {$eq: id}}).then(async data0 => {
             let file = data0.file;
 
             await Past.deleteOne({_id: id}).then(async data => {
@@ -230,7 +230,7 @@ router.route('/team/delete').post(cors(corsOptions), auth.isAuthenticated, async
             return res.status(404).json({internalError: "Unexpected error occurred! Please try again."});
         }
 
-        await Team.findOne({_id: id}).then(async data0 => {
+        await Team.findOne({_id: {$eq: id}}).then(async data0 => {
             let file = data0.file;
 
 
@@ -261,7 +261,7 @@ router.route('/gallery/delete').post(cors(corsOptions), auth.isAuthenticated, as
             return res.status(404).json({internalError: "Unexpected error occurred! Please try again."});
         }
 
-        await Gallery.findOne({_id: id}).then(async data0 => {
+        await Gallery.findOne({_id: {$eq: id}}).then(async data0 => {
             let file = data0.file;
 
 
@@ -450,7 +450,7 @@ router.route('/course/delete').post(cors(corsOptions), auth.isAuthenticated, (re
             } else if (data1 == 0) {
                 await Assign.deleteMany({course: id}).then(async data7 => {
 
-                    await Payments.updateMany({course: id}, {
+                    await Payments.updateMany({course: {$eq: id}}, {
                         course: String(courseName),
                         status: 4
                     }).then(async data3 => {
@@ -975,7 +975,7 @@ router.route('/users').get(cors(corsOptions), auth.isAuthenticated, (req, res) =
 router.route('/user').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id
-        User.findOne({_id: id}).then(data => {
+        User.findOne({_id: {$eq: id}}).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -1116,7 +1116,7 @@ router.route('/delete-payment').post(cors(corsOptions), auth.isAuthenticated, (r
             console.log(paymentData);
 
 
-            await Courses.findOne({_id: course_id}).then(async data0 => {
+            await Courses.findOne({_id: {$eq: course_id}}).then(async data0 => {
 
                 let course = data0.name;
 
@@ -1237,7 +1237,7 @@ router.route('/delete-payment-del-course').post(cors(corsOptions), auth.isAuthen
     if (req.role == 1) {
         let id = req.body.id;
 
-        Payments.find({_id: id}).then(async data1 => {
+        Payments.find({_id: {$eq: id}}).then(async data1 => {
             let paymentData = data1[0]
             let file = paymentData.file;
             console.log(paymentData);
@@ -1277,10 +1277,10 @@ router.route('/approve-payment').post(cors(corsOptions), auth.isAuthenticated, (
         let id = req.body.id;
         Payments.updateOne({_id: id}, {status: 1}).then(data1 => {
             //console.log(data1);
-            Payments.findOne({_id: id}).then(data2 => {
+            Payments.findOne({_id: {$eq: id}}).then(data2 => {
                 let course = data2.course;
                 let email = data2.email;
-                Courses.findOne({_id: course}).then(data3 => {
+                Courses.findOne({_id: {$eq: course}}).then(data3 => {
                     let newOnDemand = parseInt(data3.onDemand) + 1;
                     Courses.updateOne({_id: course}, {onDemand: newOnDemand}).then(data4 => {
 
@@ -1397,10 +1397,10 @@ router.route('/disapprove-payment').post(cors(corsOptions), auth.isAuthenticated
         let id = req.body.id;
         Payments.updateOne({_id: id}, {status: 0}).then(data1 => {
 
-            Payments.findOne({_id: id}).then(data2 => {
+            Payments.findOne({_id: {$eq: id}}).then(data2 => {
                 let course = data2.course;
                 let email = data2.email;
-                Courses.findOne({_id: course}).then(data3 => {
+                Courses.findOne({_id: {$eq: course}}).then(data3 => {
                     let course_name = data3.name;
                     let newOnDemand = parseInt(data3.onDemand) - 1;
                     Courses.updateOne({_id: course}, {onDemand: newOnDemand}).then(data4 => {
@@ -1522,7 +1522,7 @@ router.route('/users/disable').post(cors(corsOptions), auth.isAuthenticated, (re
     if (req.role == 1) {
         let id = req.body.id;
 
-        User.findOne({_id: id}).then((user) => {
+        User.findOne({_id: {$eq: id}}).then((user) => {
             let email = user.email;
 
             // register email function
@@ -1612,7 +1612,7 @@ router.route('/users/enable').post(cors(corsOptions), auth.isAuthenticated, (req
         User.updateOne({_id: id}, {status: 1}).then(data1 => {
 
 
-            User.findOne({_id: id}).then(async data2 => {
+            User.findOne({_id: {$eq: id}}).then(async data2 => {
                 let email = data2.email;
 
                 // register email function
@@ -1697,10 +1697,10 @@ router.route('/users/delete').post(cors(corsOptions), auth.isAuthenticated, (req
     if (req.role == 1) {
         let id = req.body.id;
 
-        User.findOne({_id: id}).then(data2 => {
+        User.findOne({_id: {$eq: id}}).then(data2 => {
             let email = data2.email;
             User.deleteOne({_id: id}).then(async data1 => {
-                await Payments.updateMany({user_id: id}, {status: 3}).then(async data3 => {
+                await Payments.updateMany({user_id: {$eq: id}}, {status: 3}).then(async data3 => {
                     await Verification.deleteMany({email: email}).then(async data12 => {
                         await Assign.deleteMany({instructor: id}).then(async data7 => {
 
@@ -1896,7 +1896,7 @@ router.route('/settings/password').post(cors(corsOptions), auth.isAuthenticated,
 
 
             // Find user by email
-            User.findOne({_id: id, status: 1}).then(user => {
+            User.findOne({_id: {$eq: id}, status: {$eq: 1}}).then(user => {
                 // Check if user exists
                 if (!user) {
                     return res.status(404).json({curPassword: "User not found"});
@@ -2541,7 +2541,7 @@ router.route('/gallery/delete').post(cors(corsOptions), auth.isAuthenticated, as
             return res.status(404).json({internalError: "Unexpected error occurred! Please try again."});
         }
 
-        await Gallery.findOne({_id: id}).then(async data0 => {
+        await Gallery.findOne({_id: {$eq: id}}).then(async data0 => {
             let file = data0.file;
 
             await Gallery.deleteOne({_id: id}).then(async data => {

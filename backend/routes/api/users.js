@@ -58,7 +58,7 @@ router.post("/register", cors(corsOptions), (req, res) => {
             email: email
         });
 
-        User.findOne({email: req.body.email}).then(user => {
+        User.findOne({email: {$eq: req.body.email}}).then(user => {
             if (user) {
                 return res.status(400).json({email: "Email already exists"});
             } else {
@@ -189,13 +189,13 @@ router.get("/accept-verification", cors(corsOptions), (req, res) => {
 
     let key = req.query.id;
 
-    Verification.findOne({key: key}).then(async user => {
+    Verification.findOne({key: {$eq: key}}).then(async user => {
         if (!user) {
             console.log("Invalid verification link");
             return res.status(400).json({email: "Invalid verification link"});
         } else {
 
-            await User.findOne({email: user.email, status: 1}).then(async user65 => {
+            await User.findOne({email: {$eq: user.email}, status: {$eq: 1}}).then(async user65 => {
 
                 let email = user65.email;
                 console.log(email);
@@ -271,8 +271,8 @@ router.get("/accept-verification", cors(corsOptions), (req, res) => {
                     });
                 }
 
-                await User.updateOne({email: email}, {verification: 1}).then(verification => {
-                    Verification.deleteMany({email: email}).then(async res33 => {
+                await User.updateOne({email: {$eq: email}}, {verification: {$eq: 1}}).then(verification => {
+                    Verification.deleteMany({email: {$eq: email}}).then(async res33 => {
 
 
                         await registerEmail().then(res33 => {
@@ -400,12 +400,12 @@ router.post('/forgot', cors(corsOptions), (req, res) => {
         });
 
         // Find user by email
-        User.findOne({email: email, status: 1}).then(user => {
+        User.findOne({email: {$eq: email}, status: {$eq: 1}}).then(user => {
             // Check if user exists
             if (!user) {
                 return res.status(404).json({emailnotfound: "Email not found"});
             } else {
-                Forgot.findOne({email: email}).then(forgotReqData => {
+                Forgot.findOne({email: {$eq: email}}).then(forgotReqData => {
 
                     // async..await is not allowed in global scope, must use a wrapper
                     async function forgotEmail() {
@@ -511,7 +511,7 @@ router.post('/forgot', cors(corsOptions), (req, res) => {
                     } else {
 
 
-                        Forgot.updateOne({email: email}, {id: randId, date: new Date()}).then(updateReq => {
+                        Forgot.updateOne({email: {$eq: email}}, {id: randId, date: new Date()}).then(updateReq => {
                             forgotEmail().then(r => {
                                 return res
                                     .status(200)
@@ -546,7 +546,7 @@ router.get('/forgot-change-password', cors(corsOptions), (req, res) => {
 
             if (curTime >= reqDate && curTime <= expDate) {
                 let email = request.email;
-                User.findOne({email: email, status: 1}).then(user => {
+                User.findOne({email: email, status: {$eq: 1}}).then(user => {
                     // Check if user exists
                     if (!user) {
                         return res.status(200).json({msg: 2});
@@ -593,7 +593,7 @@ router.post('/reset-password', cors(corsOptions), (req, res) => {
 
                 console.log("Cur: " + curTime + ", Req: " + reqDate + ", Exp: " + expDate)
 
-                User.findOne({email: email, status: 1}).then(user => {
+                User.findOne({email: email, status: {$eq: 1}}).then(user => {
                     if (!user) {
                         // no user exist
                         console.log("No user exist");
@@ -617,10 +617,10 @@ router.post('/reset-password', cors(corsOptions), (req, res) => {
                                         if (err) throw err;
                                         password = hash;
                                         User.updateOne({
-                                            email: email,
-                                            status: 1
+                                            email: {$eq: email},
+                                            status: {$eq: 1}
                                         }, {password: password}).then(updateReq => {
-                                            Forgot.deleteOne({email: email}).then(delReq => {
+                                            Forgot.deleteOne({email: {$eq: email}}).then(delReq => {
                                                 //return res.status(200).json("Password updated");
                                                 return res
                                                     .status(200)
@@ -642,7 +642,7 @@ router.post('/reset-password', cors(corsOptions), (req, res) => {
                 }).catch(err => console.log(err));
             } else {
                 // time expired link
-                Forgot.deleteOne({email: email}).then(delReq => {
+                Forgot.deleteOne({email: {$eq: email}}).then(delReq => {
                     console.log("Expired link");
                     return res
                         .status(400)
