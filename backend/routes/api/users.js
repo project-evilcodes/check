@@ -546,7 +546,7 @@ router.get('/forgot-change-password', cors(corsOptions), (req, res) => {
 
             if (curTime >= reqDate && curTime <= expDate) {
                 let email = request.email;
-                User.findOne({email: email, status: {$eq: 1}}).then(user => {
+                User.findOne({email: {$eq: email}, status: {$eq: 1}}).then(user => {
                     // Check if user exists
                     if (!user) {
                         return res.status(200).json({msg: 2});
@@ -593,7 +593,7 @@ router.post('/reset-password', cors(corsOptions), (req, res) => {
 
                 console.log("Cur: " + curTime + ", Req: " + reqDate + ", Exp: " + expDate)
 
-                User.findOne({email: email, status: {$eq: 1}}).then(user => {
+                User.findOne({email: {$eq: email}, status: {$eq: 1}}).then(user => {
                     if (!user) {
                         // no user exist
                         console.log("No user exist");

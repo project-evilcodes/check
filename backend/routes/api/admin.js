@@ -203,7 +203,7 @@ router.route('/past/delete').post(cors(corsOptions), auth.isAuthenticated, async
         await Past.findOne({_id: {$eq: id}}).then(async data0 => {
             let file = data0.file;
 
-            await Past.deleteOne({_id: id}).then(async data => {
+            await Past.deleteOne({_id: {$eq: id}}).then(async data => {
                 await fs.unlink(DIR3 + "/" + file, err => {
                     if (err) console.log(err);
                     else {
@@ -234,7 +234,7 @@ router.route('/team/delete').post(cors(corsOptions), auth.isAuthenticated, async
             let file = data0.file;
 
 
-            await Team.deleteOne({_id: id}).then(async data => {
+            await Team.deleteOne({_id: {$eq: id}}).then(async data => {
                 await fs.unlink(DIR + "/" + file, err => {
                     if (err) console.log(err);
                     else {
@@ -265,7 +265,7 @@ router.route('/gallery/delete').post(cors(corsOptions), auth.isAuthenticated, as
             let file = data0.file;
 
 
-            await Gallery.deleteOne({_id: id}).then(async data => {
+            await Gallery.deleteOne({_id: {$eq: id}}).then(async data => {
                 await fs.unlink(DIR2 + "/" + file, err => {
                     if (err) console.log(err);
                     else {
@@ -294,7 +294,7 @@ router.route('/assign/delete').post(cors(corsOptions), auth.isAuthenticated, (re
         if (!id) {
             return res.status(404).json({internalError: "Unexpected error occurred! Please try again."});
         }
-        Assign.deleteOne({_id: id}).then(data => {
+        Assign.deleteOne({_id: {$eq: id}}).then(data => {
             res.status(200).json(data)
         }).catch(err => {
             console.log(err)
@@ -331,7 +331,7 @@ router.route('/courses/first').get(cors(corsOptions), auth.isAuthenticated, (req
 router.route('/course').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Courses.find({_id: id}, (error, data) => {
+        Courses.find({_id: {$eq: id}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -346,7 +346,7 @@ router.route('/course').get(cors(corsOptions), auth.isAuthenticated, (req, res) 
 router.route('/assigned').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Assign.find({instructor: id}, (error, data) => {
+        Assign.find({instructor: {$eq: id}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -360,7 +360,7 @@ router.route('/assigned').get(cors(corsOptions), auth.isAuthenticated, (req, res
 router.route('/assignable').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let user = req.query.id;
-        Assign.find({instructor: user}).then((data0) => {
+        Assign.find({instructor: {$eq: user}}).then((data0) => {
             if (data0[0]) {
                 let array = [];
                 for (let i = 0; i < data0.length; i++) {
@@ -422,7 +422,7 @@ router.route('/course/update').post(cors(corsOptions), auth.isAuthenticated, (re
         let summary = req.body.summary;
         let fee = parseInt(req.body.fee);
 
-        Courses.updateOne({_id: id}, {
+        Courses.updateOne({_id: {$eq: id}}, {
             name: name,
             video: videoCompiledUrl,
             summary: summary,
@@ -448,14 +448,14 @@ router.route('/course/delete').post(cors(corsOptions), auth.isAuthenticated, (re
             if (data1 > 0) {
                 console.log("Deletion aborted due to remaining lessons");
             } else if (data1 == 0) {
-                await Assign.deleteMany({course: id}).then(async data7 => {
+                await Assign.deleteMany({course: {$eq: id}}).then(async data7 => {
 
                     await Payments.updateMany({course: {$eq: id}}, {
                         course: String(courseName),
                         status: 4
                     }).then(async data3 => {
                         // delete course
-                        await Courses.deleteOne({_id: id}).then(data => {
+                        await Courses.deleteOne({_id: {$eq: id}}).then(data => {
                             res.json(data)
                         }).catch(error => {
                             console.log(error);
@@ -506,11 +506,11 @@ router.route('/lessons/new').post(cors(corsOptions), auth.isAuthenticated, (req,
         const courseId = req.query.id;
         //console.log(position);
 
-        Lessons.find({course: courseId, position: position}).limit(1).then(async res1 => {
+        Lessons.find({course: {$eq: courseId}, position: position}).limit(1).then(async res1 => {
             if (res1[0]) {
                 console.log("exist");
 
-                await Lessons.find({course: courseId}).sort({position: -1}).limit(1).then(async res2 => {
+                await Lessons.find({course: {$eq: courseId}}).sort({position: -1}).limit(1).then(async res2 => {
 
                     let lastPosition = parseInt(res2[0].position);
                     console.log(lastPosition);
@@ -518,7 +518,7 @@ router.route('/lessons/new').post(cors(corsOptions), auth.isAuthenticated, (req,
                     for (let i = lastPosition; i >= position; i--) {
                         console.log("Before - Position: " + position + ", lastPosition: " + lastPosition + ", i: " + i)
 
-                        await Lessons.updateOne({course: courseId, position: i}, {
+                        await Lessons.updateOne({course: {$eq: courseId}, position: {$eq: i}}, {
                             position: (i + 1)
                         }).then(res3 => {
                             //console.log(res3);
@@ -595,7 +595,7 @@ router.route('/lessons/new').post(cors(corsOptions), auth.isAuthenticated, (req,
 router.route('/lessons').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let course = req.query.id;
-        Lessons.find({course: course}, (error, data) => {
+        Lessons.find({course: {$eq: course}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -609,7 +609,7 @@ router.route('/lessons').get(cors(corsOptions), auth.isAuthenticated, (req, res)
 router.route('/lessons/first').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let course = req.query.id;
-        Lessons.find({course: course}).sort({position: 1}).limit(1).then(data => {
+        Lessons.find({course: {$eq: course}}).sort({position: 1}).limit(1).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -624,7 +624,7 @@ router.route('/lessons/first').get(cors(corsOptions), auth.isAuthenticated, (req
 router.route('/lessons/last').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let course = req.query.id;
-        Lessons.find({course: course}).sort({position: -1}).limit(1).then(data => {
+        Lessons.find({course: {$eq: course}}).sort({position: -1}).limit(1).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -654,7 +654,7 @@ router.route('/lessons/count').get(cors(corsOptions), auth.isAuthenticated, (req
 router.route('/lesson').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Lessons.find({_id: id}, (error, data) => {
+        Lessons.find({_id: {$eq: id}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -680,7 +680,7 @@ router.route('/lesson/update').post(cors(corsOptions), auth.isAuthenticated, (re
         let lesson = req.body.lesson;
         let position = req.body.position;
 
-        Lessons.updateOne({_id: id}, {lesson: lesson, position: position}, (error, data) => {
+        Lessons.updateOne({_id: {$eq: id}}, {lesson: lesson, position: position}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -695,9 +695,9 @@ router.route('/lesson/delete').post(cors(corsOptions), auth.isAuthenticated, (re
     if (req.role == 1) {
         let id = req.query.id;
         // delete here
-        Topics.deleteMany({lesson: id}).then(res7 => {
+        Topics.deleteMany({lesson: {$eq: id}}).then(res7 => {
             //console.log(res7);
-            Lessons.deleteOne({_id: id}).then(res8 => {
+            Lessons.deleteOne({_id: {$eq: id}}).then(res8 => {
                 //console.log(res8);
                 console.log("Full delete")
             }).catch(err8 => {
@@ -729,7 +729,7 @@ router.route('/topics/new').post(cors(corsOptions), auth.isAuthenticated, async 
         }
 
         let id = req.query.id;
-        await Lessons.find({_id: id}).limit(1).then(async data => {
+        await Lessons.find({_id: {$eq: id}}).limit(1).then(async data => {
 
             let course = data[0].course;
             const position = req.body.position
@@ -741,15 +741,15 @@ router.route('/topics/new').post(cors(corsOptions), auth.isAuthenticated, async 
             let videoUrl3 = videoUrl2.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/");
             const videoCompiledUrl = videoUrl3.replace("https://vimeo.com/", "https://player.vimeo.com/video/");
 
-            await Topics.find({course: course, lesson: id, position: position}).limit(1).then(async res1 => {
+            await Topics.find({course: {$eq: course}, lesson: {$eq: id}, position: {$eq: position}}).limit(1).then(async res1 => {
                 if (res1[0]) {
                     console.log("exist");
-                    await Topics.find({course: course, lesson: id}).sort({position: -1}).limit(1).then(async res2 => {
+                    await Topics.find({course: {$eq: course}, lesson: {$eq: id}}).sort({position: -1}).limit(1).then(async res2 => {
                         let lastPosition = parseInt(res2[0].position);
                         console.log("Last position: " + lastPosition);
                         for (let i = lastPosition; i >= position; i--) {
                             console.log("Before - Position: " + position + ", lastPosition: " + lastPosition + ", i: " + i)
-                            await Topics.updateOne({course: course, lesson: id, position: i}, {
+                            await Topics.updateOne({course: {$eq: course}, lesson: id, position: i}, {
                                 position: i + 1
                             }).then(async res3 => {
                                 //console.log(data);
@@ -833,7 +833,7 @@ router.route('/topics/new').post(cors(corsOptions), auth.isAuthenticated, async 
 router.route('/topics').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let lesson = req.query.id;
-        Topics.find({lesson: lesson}).sort({position: 1}).then(data => {
+        Topics.find({lesson: {$eq: lesson}}).sort({position: 1}).then(data => {
             res.status(200).json(data)
         }).catch(err => {
             console.log(err);
@@ -848,7 +848,7 @@ router.route('/topics').get(cors(corsOptions), auth.isAuthenticated, (req, res) 
 router.route('/topics/first').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let lesson = req.query.id;
-        Topics.find({lesson: lesson}).sort({position: 1}).limit(1).then(data => {
+        Topics.find({lesson: {$eq: lesson}}).sort({position: 1}).limit(1).then(data => {
             res.status(200).json(data)
         }).catch(err => {
             console.log(err);
@@ -863,7 +863,7 @@ router.route('/topics/first').get(cors(corsOptions), auth.isAuthenticated, (req,
 router.route('/topics/last').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let lesson = req.query.id;
-        Topics.find({lesson: lesson}).sort({position: -1}).limit(1).then(data => {
+        Topics.find({lesson: {$eq: lesson}}).sort({position: -1}).limit(1).then(data => {
             res.status(200).json(data)
         }).catch(err => {
             console.log(err);
@@ -878,7 +878,7 @@ router.route('/topics/last').get(cors(corsOptions), auth.isAuthenticated, (req, 
 router.route('/topicsByCourse').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let course = req.query.id;
-        Topics.find({course: course}, (error, data) => {
+        Topics.find({course: {$eq: course}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -892,7 +892,7 @@ router.route('/topicsByCourse').get(cors(corsOptions), auth.isAuthenticated, (re
 router.route('/topic').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Topics.find({_id: id}, (error, data) => {
+        Topics.find({_id: {$eq: id}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -927,7 +927,7 @@ router.route('/topic/update').post(cors(corsOptions), auth.isAuthenticated, (req
         let video = videoCompiledUrl;
         let position = req.body.position;
 
-        Topics.updateOne({_id: id}, {topic: topic, video: video, position: position}, (error, data) => {
+        Topics.updateOne({_id: id}, {topic: {$eq: topic}, video: {$eq: video}, position: {$eq: position}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -942,7 +942,7 @@ router.route('/topic/delete').post(cors(corsOptions), auth.isAuthenticated, (req
     if (req.role == 1) {
         let id = req.query.id;
 
-        Topics.deleteOne({_id: id}, (error, data) => {
+        Topics.deleteOne({_id: {$eq: id}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -1012,7 +1012,7 @@ router.route('/instructor').get(cors(corsOptions), auth.isAuthenticated, (req, r
 
         let id = req.query.id;
 
-        User.find({_id: id, role: 2}).then((data) => {
+        User.find({_id: {$eq: id}, role: 2}).then((data) => {
             res.status(200).json(data);
         }).catch((error) => {
             res.status(404).json({internalError: "Instructor not found"});
@@ -1031,7 +1031,7 @@ router.route('/super-admins').get(cors(corsOptions), auth.isAuthenticated, (req,
             $and: [
                 {role: 1},
                 {email: {$ne: 'admin@votechno.lk'}},
-                {email: {$ne: req.email}}
+                {email: {$ne: {$eq: req.email}}}
             ]
         }, (error, data) => {
             if (error) {
@@ -1090,7 +1090,7 @@ router.route('/approved-payments').get(cors(corsOptions), auth.isAuthenticated, 
 router.route('/payment').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Payments.find({_id: id}).limit(1).then(data => {
+        Payments.find({_id: {$eq: id}}).limit(1).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -1108,7 +1108,7 @@ router.route('/delete-payment').post(cors(corsOptions), auth.isAuthenticated, (r
     if (req.role == 1) {
         let id = req.body.id;
 
-        Payments.find({_id: id}).then(async data1 => {
+        Payments.find({_id: {$eq: id}}).then(async data1 => {
             let paymentData = data1[0]
             let file = paymentData.file;
             let email = paymentData.email;
@@ -1189,7 +1189,7 @@ router.route('/delete-payment').post(cors(corsOptions), auth.isAuthenticated, (r
                     });
                 }
 
-                await Payments.deleteOne({_id: id}).then(async data2 => {
+                await Payments.deleteOne({_id: {$eq: id}}).then(async data2 => {
                     await registerEmail().then(r => {
                         console.log("Full success")
                         res.status(200).json(data2)
@@ -1242,7 +1242,7 @@ router.route('/delete-payment-del-course').post(cors(corsOptions), auth.isAuthen
             let file = paymentData.file;
             console.log(paymentData);
 
-            await Payments.deleteOne({_id: id}).then(async data2 => {
+            await Payments.deleteOne({_id: {$eq: id}}).then(async data2 => {
                 console.log("Full success")
                 res.status(200).json(data2)
                 await fs.unlink(DIR1 + "/" + file, err => {
@@ -1275,14 +1275,14 @@ router.route('/delete-payment-del-course').post(cors(corsOptions), auth.isAuthen
 router.route('/approve-payment').post(cors(corsOptions), auth.isAuthenticated, (req, res, next) => {
     if (req.role == 1) {
         let id = req.body.id;
-        Payments.updateOne({_id: id}, {status: 1}).then(data1 => {
+        Payments.updateOne({_id: {$eq: id}}, {status: 1}).then(data1 => {
             //console.log(data1);
             Payments.findOne({_id: {$eq: id}}).then(data2 => {
                 let course = data2.course;
                 let email = data2.email;
                 Courses.findOne({_id: {$eq: course}}).then(data3 => {
                     let newOnDemand = parseInt(data3.onDemand) + 1;
-                    Courses.updateOne({_id: course}, {onDemand: newOnDemand}).then(data4 => {
+                    Courses.updateOne({_id: {$eq: course}}, {onDemand: newOnDemand}).then(data4 => {
 
 
                         // register email function
@@ -1395,7 +1395,7 @@ router.route('/approve-payment').post(cors(corsOptions), auth.isAuthenticated, (
 router.route('/disapprove-payment').post(cors(corsOptions), auth.isAuthenticated, (req, res, next) => {
     if (req.role == 1) {
         let id = req.body.id;
-        Payments.updateOne({_id: id}, {status: 0}).then(data1 => {
+        Payments.updateOne({_id: {$eq: id}}, {status: 0}).then(data1 => {
 
             Payments.findOne({_id: {$eq: id}}).then(data2 => {
                 let course = data2.course;
@@ -1403,7 +1403,7 @@ router.route('/disapprove-payment').post(cors(corsOptions), auth.isAuthenticated
                 Courses.findOne({_id: {$eq: course}}).then(data3 => {
                     let course_name = data3.name;
                     let newOnDemand = parseInt(data3.onDemand) - 1;
-                    Courses.updateOne({_id: course}, {onDemand: newOnDemand}).then(data4 => {
+                    Courses.updateOne({_id: {$eq: course}}, {onDemand: newOnDemand}).then(data4 => {
 
 
                         // register email function
@@ -1577,7 +1577,7 @@ router.route('/users/disable').post(cors(corsOptions), auth.isAuthenticated, (re
                 });
             }
 
-            User.updateOne({_id: id}, {status: 0}).then(async data1 => {
+            User.updateOne({_id: {$eq: id}}, {status: 0}).then(async data1 => {
 
                 await registerEmail().then(r => {
                     console.log("Full success")
@@ -1609,7 +1609,7 @@ router.route('/users/disable').post(cors(corsOptions), auth.isAuthenticated, (re
 router.route('/users/enable').post(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.body.id;
-        User.updateOne({_id: id}, {status: 1}).then(data1 => {
+        User.updateOne({_id: {$eq: id}}, {status: 1}).then(data1 => {
 
 
             User.findOne({_id: {$eq: id}}).then(async data2 => {
@@ -1699,10 +1699,10 @@ router.route('/users/delete').post(cors(corsOptions), auth.isAuthenticated, (req
 
         User.findOne({_id: {$eq: id}}).then(data2 => {
             let email = data2.email;
-            User.deleteOne({_id: id}).then(async data1 => {
+            User.deleteOne({_id: {$eq: id}}).then(async data1 => {
                 await Payments.updateMany({user_id: {$eq: id}}, {status: 3}).then(async data3 => {
-                    await Verification.deleteMany({email: email}).then(async data12 => {
-                        await Assign.deleteMany({instructor: id}).then(async data7 => {
+                    await Verification.deleteMany({email: {$eq: email}}).then(async data12 => {
+                        await Assign.deleteMany({instructor: {$eq: id}}).then(async data7 => {
 
 
                             // register email function
@@ -1814,7 +1814,7 @@ router.post("/register", cors(corsOptions), auth.isAuthenticated, (req, res) => 
             return res.status(400).json(errors);
         }
 
-        User.findOne({email: req.body.email}).then(user => {
+        User.findOne({email: {$eq: req.body.email}}).then(user => {
             if (user) {
                 return res.status(400).json({email: "Email already exists"});
             } else {
@@ -1861,7 +1861,7 @@ router.route('/users/edit').post(cors(corsOptions), auth.isAuthenticated, (req, 
         }
 
         let id = req.body.id;
-        User.updateOne({_id: id}, {
+        User.updateOne({_id: {$eq: id}}, {
             name: req.body.name,
             tel: req.body.tel
         }).then(async data1 => {
@@ -1910,7 +1910,7 @@ router.route('/settings/password').post(cors(corsOptions), auth.isAuthenticated,
                             bcrypt.hash(password, salt, (err, hash) => {
                                 if (err) throw err;
                                 password = hash;
-                                User.updateOne({_id: id}, {
+                                User.updateOne({_id: {$eq: id}}, {
                                     password: password
                                 }).then(async data1 => {
                                     res.status(200).json(data1);
@@ -1957,7 +1957,7 @@ router.route('/zoom/new').post(cors(corsOptions), auth.isAuthenticated, (req, re
         console.log("start: " + start)
         console.log("end: " + end)
 
-        Courses.updateOne({_id: course}, {zoom: zoom, zoomStart: start, zoomEnd: end}).then(data => {
+        Courses.updateOne({_id: {$eq: course}}, {zoom: {$eq: zoom}, zoomStart: {$eq: start}, zoomEnd: {$eq: end}}).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -1975,7 +1975,7 @@ router.route('/zoom/delete').post(cors(corsOptions), auth.isAuthenticated, (req,
 
         let course = req.query.course;
 
-        Courses.updateOne({_id: course}, {zoom: "", zoomStart: "", zoomEnd: ""}).then(data => {
+        Courses.updateOne({_id: {$eq: course}}, {zoom: "", zoomStart: "", zoomEnd: ""}).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -1991,7 +1991,7 @@ router.route('/zoom/delete').post(cors(corsOptions), auth.isAuthenticated, (req,
 router.route('/course/disable').post(cors(corsOptions), auth.isAuthenticated, async (req, res) => {
     if (req.role == 1) {
         let id = req.body.id;
-        await Courses.updateOne({_id: id}, {status: 0}).then(data1 => {
+        await Courses.updateOne({_id: {$eq: id}}, {status: 0}).then(data1 => {
             res.status(200).json(data1);
         }).catch(err1 => {
             console.log(err1);
@@ -2006,7 +2006,7 @@ router.route('/course/disable').post(cors(corsOptions), auth.isAuthenticated, as
 router.route('/course/enable').post(cors(corsOptions), auth.isAuthenticated, async (req, res) => {
     if (req.role == 1) {
         let id = req.body.id;
-        await Courses.updateOne({_id: id}, {status: 1}).then(data1 => {
+        await Courses.updateOne({_id: {$eq: id}}, {status: 1}).then(data1 => {
             res.status(200).json(data1);
         }).catch(err1 => {
             console.log(err1);
@@ -2021,7 +2021,7 @@ router.route('/course/enable').post(cors(corsOptions), auth.isAuthenticated, asy
 router.route('/past/info').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Past.find({_id: id}).limit(1).then(data => {
+        Past.find({_id: {$eq: id}}).limit(1).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -2038,7 +2038,7 @@ router.route('/past/info').get(cors(corsOptions), auth.isAuthenticated, (req, re
 router.route('/team/info').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Team.find({_id: id}).limit(1).then(data => {
+        Team.find({_id: {$eq: id}}).limit(1).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -2144,7 +2144,7 @@ router.route('/past/edit').post(cors(corsOptions), auth.isAuthenticated, async (
 
         console.log(id, name, title, body);
 
-        await Past.updateOne({_id: id}, {name: name, title: title, body: body}).then(data1 => {
+        await Past.updateOne({_id: {$eq: id}}, {name: {$eq: name}, title: {$eq: title}, body: {$eq: body}}).then(data1 => {
             console.log(data1);
             res.status(200).json(data1);
         }).catch(err1 => {
@@ -2175,7 +2175,7 @@ router.route('/team/edit').post(cors(corsOptions), auth.isAuthenticated, async (
 
         console.log(id, name, title);
 
-        await Team.updateOne({_id: id}, {name: name, title: title}).then(data1 => {
+        await Team.updateOne({_id: {$eq: id}}, {name: {$eq: name}, title: {$eq: title}}).then(data1 => {
             console.log(data1);
             res.status(200).json(data1);
         }).catch(err1 => {
@@ -2350,7 +2350,7 @@ router.route('/past').get(cors(corsOptions), auth.isAuthenticated, (req, res) =>
 
 // User check point
 router.route('/security/check-point').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
-    User.find({_id: req.id, email: req.email, status: 1}).limit(1).then((data3) => {
+    User.find({_id: {$eq: req.id}, email: {$eq: req.email}, status: 1}).limit(1).then((data3) => {
         res.status(200).json(data3)
     }).catch((error3) => {
         return res
@@ -2411,7 +2411,7 @@ router.route('/redhat').get(cors(corsOptions), auth.isAuthenticated, (req, res) 
 router.route('/edit-redhat').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Redhat.find({_id: id}, (error, data) => {
+        Redhat.find({_id: {$eq: id}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -2426,7 +2426,7 @@ router.route('/edit-redhat').get(cors(corsOptions), auth.isAuthenticated, (req, 
 router.route('/edit-gallery').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
     if (req.role == 1) {
         let id = req.query.id;
-        Gallery.find({_id: id}, (error, data) => {
+        Gallery.find({_id: {$eq: id}}, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -2454,7 +2454,7 @@ router.route('/edit-redhat').post(cors(corsOptions), auth.isAuthenticated, (req,
         let body = req.body.body;
         let date = new Date();
 
-        Redhat.updateOne({_id: id}, {title: title, body: body, date: date}, (error, data) => {
+        Redhat.updateOne({_id: {$eq: id}}, {title: {$eq: title}, body: {$eq: body}, date: {$eq: date}}, (error, data) => {
             if (error) {
                 console.log(error);
                 return (error);
@@ -2473,7 +2473,7 @@ router.route('/redhat/delete').post(cors(corsOptions), auth.isAuthenticated, (re
     if (req.role == 1) {
         let id = req.body.id;
         // delete here
-        Redhat.deleteOne({_id: id}).then(res8 => {
+        Redhat.deleteOne({_id: {$eq: id}}).then(res8 => {
             //console.log(res8);
             console.log("Full delete - Redhat");
             return res
@@ -2522,7 +2522,7 @@ router.route('/edit-gallery').post(cors(corsOptions), auth.isAuthenticated, (req
         let body = req.body.body;
         let date = new Date();
 
-        Gallery.updateOne({_id: id}, {title: title, body: body, date: date}, (error, data) => {
+        Gallery.updateOne({_id: {$eq: id}}, {title: {$eq: title}, body: {$eq: body}, date: {$eq: date}}, (error, data) => {
             if (error) {
                 console.log(error);
                 return (error);
@@ -2544,7 +2544,7 @@ router.route('/gallery/delete').post(cors(corsOptions), auth.isAuthenticated, as
         await Gallery.findOne({_id: {$eq: id}}).then(async data0 => {
             let file = data0.file;
 
-            await Gallery.deleteOne({_id: id}).then(async data => {
+            await Gallery.deleteOne({_id: {$eq: id}}).then(async data => {
                 await fs.unlink(DIR2 + "/" + file, err => {
                     if (err) console.log(err);
                     else {
