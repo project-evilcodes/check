@@ -15,7 +15,6 @@ const validateForgotInput = require("../../validation/forgot");
 
 // Load User model
 const User = require("../../models/User");
-//const Courses = require("../../models/Courses");
 const Forgot = require("../../models/Forgot");
 const Verification = require("../../models/Verifications");
 
@@ -534,7 +533,7 @@ router.get('/forgot-change-password', cors(corsOptions), (req, res) => {
     let id = req.query.id;
 
     // Find user by email
-    Forgot.findOne({id: id}).then(request => {
+    Forgot.findOne({id: {$eq: id}}).then(request => {
         // Check if user exists
         if (!request) {
             return res.status(200).json({msg: 1});
