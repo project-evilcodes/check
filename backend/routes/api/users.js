@@ -575,7 +575,7 @@ router.post('/reset-password', cors(corsOptions), (req, res) => {
     let password2 = req.body.password2;
 
     // Find user by email
-    Forgot.findOne({id: id}).then(request => {
+    Forgot.findOne({id: {$eq: id}}).then(request => {
         // Check if user exists
         if (!request) {
             // invalid token
