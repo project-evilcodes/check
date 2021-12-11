@@ -423,10 +423,10 @@ router.route('/course/update').post(cors(corsOptions), auth.isAuthenticated, (re
         let fee = parseInt(req.body.fee);
 
         Courses.updateOne({_id: {$eq: id}}, {
-            name: name,
-            video: videoCompiledUrl,
-            summary: summary,
-            fee: fee
+            name: {$eq: name},
+            video: {$eq: videoCompiledUrl},
+            summary: {$eq: summary},
+            fee: {$eq: fee}
         }, (error, data) => {
             if (error) {
                 return (error)
@@ -2142,8 +2142,6 @@ router.route('/past/edit').post(cors(corsOptions), auth.isAuthenticated, async (
         let title = req.body.title;
         let body = req.body.body;
 
-        console.log(id, name, title, body);
-
         await Past.updateOne({_id: {$eq: id}}, {name: {$eq: name}, title: {$eq: title}, body: {$eq: body}}).then(data1 => {
             console.log(data1);
             res.status(200).json(data1);
@@ -2172,8 +2170,6 @@ router.route('/team/edit').post(cors(corsOptions), auth.isAuthenticated, async (
         let id = req.body.id;
         let name = req.body.name;
         let title = req.body.title;
-
-        console.log(id, name, title);
 
         await Team.updateOne({_id: {$eq: id}}, {name: {$eq: name}, title: {$eq: title}}).then(data1 => {
             console.log(data1);
