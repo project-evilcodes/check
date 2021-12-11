@@ -103,7 +103,7 @@ router.post("/register", cors(corsOptions), (req, res) => {
                             '<div style="width: 100%; min-height: 400px;">' +
                             '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
                             '<div>' +
-                            '<h2>Hello, ' + req.body.name + '</h2>' +
+                            '<h2>Hello there,</h2>' +
                             '<p>' +
                             'Just click below to verify that you are a part of <b>Votechno Institute</b>' +
                             '</p>' +
