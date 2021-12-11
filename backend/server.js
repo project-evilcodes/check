@@ -10,6 +10,13 @@ const u = require("./routes/api/u")
 const instructor = require("./routes/api/instructor")
 const path = require("path");
 
+// set up rate limiter: maximum of five requests per minute
+const RateLimit = require('express-rate-limit');
+const limiter = new RateLimit({
+    windowMs: 1*60*1000, // 1 minute
+    max: 5
+});
+
 // middleware
 const auth = require('./middleware/check-auth');
 
@@ -17,6 +24,7 @@ const app = express();
 
 // Bodyparser middleware
 app.use(
+    limiter,
     bodyParser.urlencoded({
         extended: false
     })
