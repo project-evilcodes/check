@@ -214,7 +214,7 @@ class Dashboard extends Component {
                                                     <div className={"curZoom"}>
                                                         <p><b>Link:</b><br/><a
                                                             href={this.state.lessonsAll.map(zoom => zoom.zoom)}
-                                                            target={"_blank"}>{this.state.lessonsAll.map(zoom => zoom.zoom)}</a>
+                                                            target={"_blank"} rel="noopener noreferrer">{this.state.lessonsAll.map(zoom => zoom.zoom)}</a>
                                                         </p>
                                                         <p><b>Start:</b><br/><span id={"zoomStart"}>
                                             </span></p>

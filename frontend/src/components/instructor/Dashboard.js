@@ -81,7 +81,7 @@ class Dashboard extends Component {
 
                         <div className={"con-mid"} style={{width: "100%", marginBottom: "50px"}}>
                             <p>
-                                Powered by <a target={"_blank"} href={"https://www.coduza.com/"}>CODUZA</a>
+                                Powered by <a target={"_blank"} rel="noopener noreferrer" href={"https://www.coduza.com/"}>CODUZA</a>
                             </p>
                         </div>
 

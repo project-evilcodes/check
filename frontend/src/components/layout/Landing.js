@@ -338,7 +338,7 @@ class Landing extends Component {
                                          className="overflow-hidden border-radius-4px" alt=""/>
                                     <a href="https://www.youtube.com/watch?v=36KIvQm4IS0"
                                        className="popup-youtube absolute-middle-center video-icon-box video-icon-extra-large left-0px wow animate__fadeIn"
-                                       data-wow-delay="0.2s" target={"_blank"}>
+                                       data-wow-delay="0.2s" rel="noopener noreferrer" target={"_blank"}>
                     <span>
                       <span className="video-icon bg-white box-shadow-large">
                         <i className="fas fa-play text-salmon-rose"/>

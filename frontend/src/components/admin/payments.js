@@ -258,13 +258,13 @@ class Dashboard extends Component {
                         tel: payment.tel,
                         email: payment.email,
                         actions: <div><a href={"/admin/users/payments/view/" + payment._id} target={"_blank"}
-                                         className={"btn pay-btn btn-full-blue"}>View</a>
+                                         className={"btn pay-btn btn-full-blue"} rel="noopener noreferrer">View</a>
                             <button id={'a-' + payment._id} onClick={this.approvePayment}
                                     className={"btn pay-btn btn-full-green"}>Approve
                             </button>
                             <a href={'tel:' + payment.tel}
                                className={"btn pay-btn btn-full-dark"}>Voice call</a>
-                            <a href={'mailto:' + payment.email} target={"_blank"}
+                            <a href={'mailto:' + payment.email} rel="noopener noreferrer" target={"_blank"}
                                className={"btn pay-btn btn-full-dark"}>Email</a>
                             <button id={'r-' + payment._id} onClick={this.removePayment}
                                     className={"btn pay-btn btn-full-red"}>Remove
@@ -284,11 +284,11 @@ class Dashboard extends Component {
                         name: payment.user,
                         tel: payment.tel,
                         email: payment.email,
-                        actions: <div><a href={"/admin/users/payments/view/" + payment._id} target={"_blank"}
+                        actions: <div><a href={"/admin/users/payments/view/" + payment._id} rel="noopener noreferrer" target={"_blank"}
                                          className={"btn pay-btn btn-full-blue"}>View</a>
                             <a href={'tel:' + payment.tel}
                                className={"btn pay-btn btn-full-dark"}>Voice call</a>
-                            <a href={'mailto:' + payment.email} target={"_blank"}
+                            <a href={'mailto:' + payment.email} rel="noopener noreferrer" target={"_blank"}
                                className={"btn pay-btn btn-full-dark"}>Email</a>
                             <button id={'r-' + payment._id} onClick={this.removePayment}
                                     className={"btn pay-btn btn-full-red"}>Remove
@@ -305,11 +305,11 @@ class Dashboard extends Component {
                         name: payment.user,
                         tel: payment.tel,
                         email: payment.email,
-                        actions: <div><a href={"/admin/users/payments/view/" + payment._id} target={"_blank"}
+                        actions: <div><a href={"/admin/users/payments/view/" + payment._id} rel="noopener noreferrer" target={"_blank"}
                                          className={"btn pay-btn btn-full-blue"}>View</a>
                             <a href={'tel:' + payment.tel}
                                className={"btn pay-btn btn-full-dark"}>Voice call</a>
-                            <a href={'mailto:' + payment.email} target={"_blank"}
+                            <a href={'mailto:' + payment.email} rel="noopener noreferrer" target={"_blank"}
                                className={"btn pay-btn btn-full-dark"}>Email</a>
                             <button id={'r-' + payment._id} onClick={this.removeCoursePayment}
                                     className={"btn pay-btn btn-full-red"}>Remove
