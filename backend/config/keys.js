@@ -11,7 +11,7 @@ module.exports = {
     APP_URL: process.env.APP_URL,
 
     // CORS Policies
-    CORS_URL: process.env.CORS_URL,
+    CORS_URL: "*",
 
     //ADMIN_EMAIL: process.env.,
 
