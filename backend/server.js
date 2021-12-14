@@ -13,8 +13,8 @@ const path = require("path");
 // set up rate limiter: maximum of five requests per minute
 const RateLimit = require('express-rate-limit');
 const limiter = new RateLimit({
-    windowMs: 1*60*1000, // 1 minute
-    max: 5
+    windowMs: 5*60*1000, // 5 minutes
+    max: 100
 });
 
 // middleware

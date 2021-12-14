@@ -11,7 +11,7 @@ module.exports = {
     APP_URL: process.env.APP_URL,
 
     // CORS Policies
-    CORS_URL: "*",
+    CORS_URL: "http://localhost:3000",
 
     //ADMIN_EMAIL: process.env.,
 
