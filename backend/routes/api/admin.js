@@ -451,7 +451,7 @@ router.route('/course/delete').post(cors(corsOptions), auth.isAuthenticated, (re
                 await Assign.deleteMany({course: {$eq: id}}).then(async data7 => {
 
                     await Payments.updateMany({course: {$eq: id}}, {
-                        course: String({$eq: courseName}),
+                        course: String(courseName),
                         status: 4
                     }).then(async data3 => {
                         // delete course
@@ -741,10 +741,17 @@ router.route('/topics/new').post(cors(corsOptions), auth.isAuthenticated, async 
             let videoUrl3 = videoUrl2.replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/");
             const videoCompiledUrl = videoUrl3.replace("https://vimeo.com/", "https://player.vimeo.com/video/");
 
-            await Topics.find({course: {$eq: course}, lesson: {$eq: id}, position: {$eq: position}}).limit(1).then(async res1 => {
+            await Topics.find({
+                course: {$eq: course},
+                lesson: {$eq: id},
+                position: {$eq: position}
+            }).limit(1).then(async res1 => {
                 if (res1[0]) {
                     console.log("exist");
-                    await Topics.find({course: {$eq: course}, lesson: {$eq: id}}).sort({position: -1}).limit(1).then(async res2 => {
+                    await Topics.find({
+                        course: {$eq: course},
+                        lesson: {$eq: id}
+                    }).sort({position: -1}).limit(1).then(async res2 => {
                         let lastPosition = parseInt(res2[0].position);
                         console.log("Last position: " + lastPosition);
                         for (let i = lastPosition; i >= position; i--) {
@@ -914,9 +921,7 @@ router.route('/topic/update').post(cors(corsOptions), auth.isAuthenticated, (req
             return res.status(400).json(errors);
         }
 
-
         let id = req.query.id;
-
         let videoUrl = req.body.video
 
         let videoUrl2 = videoUrl.replace("https://youtu.be/", "https://www.youtube.com/embed/");
@@ -927,7 +932,11 @@ router.route('/topic/update').post(cors(corsOptions), auth.isAuthenticated, (req
         let video = videoCompiledUrl;
         let position = req.body.position;
 
-        Topics.updateOne({_id: {$eq: id}}, {topic: {$eq: topic}, video: {$eq: video}, position: {$eq: position}}, (error, data) => {
+        Topics.updateOne({_id: {$eq: id}}, {
+            topic: {$eq: topic},
+            video: {$eq: video},
+            position: {$eq: position}
+        }, (error, data) => {
             if (error) {
                 return (error)
             } else {
@@ -1957,7 +1966,11 @@ router.route('/zoom/new').post(cors(corsOptions), auth.isAuthenticated, (req, re
         console.log("start: " + start)
         console.log("end: " + end)
 
-        Courses.updateOne({_id: {$eq: course}}, {zoom: {$eq: zoom}, zoomStart: {$eq: start}, zoomEnd: {$eq: end}}).then(data => {
+        Courses.updateOne({_id: {$eq: course}}, {
+            zoom: {$eq: zoom},
+            zoomStart: {$eq: start},
+            zoomEnd: {$eq: end}
+        }).then(data => {
             res.json(data)
         }).catch(error => {
             console.log(error);
@@ -2142,7 +2155,11 @@ router.route('/past/edit').post(cors(corsOptions), auth.isAuthenticated, async (
         let title = req.body.title;
         let body = req.body.body;
 
-        await Past.updateOne({_id: {$eq: id}}, {name: {$eq: name}, title: {$eq: title}, body: {$eq: body}}).then(data1 => {
+        await Past.updateOne({_id: {$eq: id}}, {
+            name: {$eq: name},
+            title: {$eq: title},
+            body: {$eq: body}
+        }).then(data1 => {
             console.log(data1);
             res.status(200).json(data1);
         }).catch(err1 => {
@@ -2450,7 +2467,11 @@ router.route('/edit-redhat').post(cors(corsOptions), auth.isAuthenticated, (req,
         let body = req.body.body;
         let date = new Date();
 
-        Redhat.updateOne({_id: {$eq: id}}, {title: {$eq: title}, body: {$eq: body}, date: {$eq: date}}, (error, data) => {
+        Redhat.updateOne({_id: {$eq: id}}, {
+            title: {$eq: title},
+            body: {$eq: body},
+            date: {$eq: date}
+        }, (error, data) => {
             if (error) {
                 console.log(error);
                 return (error);
@@ -2518,7 +2539,11 @@ router.route('/edit-gallery').post(cors(corsOptions), auth.isAuthenticated, (req
         let body = req.body.body;
         let date = new Date();
 
-        Gallery.updateOne({_id: {$eq: id}}, {title: {$eq: title}, body: {$eq: body}, date: {$eq: date}}, (error, data) => {
+        Gallery.updateOne({_id: {$eq: id}}, {
+            title: {$eq: title},
+            body: {$eq: body},
+            date: {$eq: date}
+        }, (error, data) => {
             if (error) {
                 console.log(error);
                 return (error);

@@ -16,6 +16,8 @@ module.exports = function validateTopicEditInput(data) {
     // Name checks
     if (Validator.isEmpty(data.video)) {
         errors.video = "Video URL is required";
+    } else if (data.video.startsWith("https://youtu.be/") === false && data.video.startsWith("https://www.youtube.com/embed/") === false && data.video.startsWith("https://www.youtube.com/watch?v=") === false && data.video.startsWith("https://www.youtube.com/embed/") === false && data.video.startsWith("https://vimeo.com/") === false && data.video.startsWith("https://player.vimeo.com/video/") === false && data.video.startsWith("https://drive.google.com/file/")) {
+        errors.video = "Invalid video URL";
     }
 
     return {
