@@ -83,14 +83,13 @@ router.route('/pub-courses').get((req, res, next) => {
 // get courses information
 router.route('/course').get(cors(corsOptions), auth.isAuthenticated, (req, res, next) => {
     if (req.role == 3) {
-        Courses.find({_id: {$eq: req.query.course}, status: 1}, (error, data) => {
-            if (error) {
-                return (error)
-            } else {
-                res.json(data)
-                //next()
-            }
-        }).limit(1)
+
+        Courses.find({_id: {$eq: req.query.course}, status: 1}).limit(1).then(data => {
+            res.json(data)
+        }).catch(err => {
+            console.log(err);
+        })
+
     }
 })
 
@@ -159,12 +158,12 @@ router.route('/payment').post(cors(corsOptions), auth.isAuthenticated, upload.si
                     let course_name = courseData.name;
 
                     const addPayment = new Payments({
-                        course: req.body.course,
-                        user: req.name,
-                        tel: req.tel,
-                        email: req.email,
-                        user_id: req.id,
-                        file: fileName,
+                        course: {$eq: req.body.course},
+                        user: {$eq: req.name},
+                        tel: {$eq: req.tel},
+                        email: {$eq: req.email},
+                        user_id: {$eq: req.id},
+                        file: {$eq: fileName},
                         date: new Date()
                     });
 
@@ -199,7 +198,7 @@ router.route('/payment').post(cors(corsOptions), auth.isAuthenticated, upload.si
                                 'border-radius: 10px;' +
                                 '">' +
                                 '<div style="width: 100%; min-height: 400px;">' +
-                                '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                                '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                                 '<div>' +
                                 '<h2>Hello, ' + "Admin" + '</h2>' +
                                 '<h1>' +
@@ -352,7 +351,7 @@ router.route('/delete-payment').post(cors(corsOptions), auth.isAuthenticated, as
                             'border-radius: 10px;' +
                             '">' +
                             '<div style="width: 100%; min-height: 400px;">' +
-                            '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                            '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                             '<div>' +
                             '<h2>Hello, ' + "Admin" + '</h2>' +
                             '<h1>' +
@@ -394,7 +393,7 @@ router.route('/delete-payment').post(cors(corsOptions), auth.isAuthenticated, as
                 }
 
 
-            await Payments.deleteOne({course: {$eq: course}, user_id: req.id}).then(async data => {
+            await Payments.deleteOne({course: {$eq: course}, user_id: {$eq: req.id}}).then(async data => {
                 res.json(data)
                 await fs.unlink(DIR + "/" + file, async err => {
                     if (err) console.log(err);
@@ -717,7 +716,7 @@ router.post("/resend-verification", cors(corsOptions), auth.isAuthenticated, (re
                             'border-radius: 10px;' +
                             '">' +
                             '<div style="width: 100%; min-height: 400px;">' +
-                            '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                            '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                             '<div>' +
                             '<h2>Hello, ' + userData.name + '</h2>' +
                             '<p>' +

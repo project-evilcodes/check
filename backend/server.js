@@ -14,7 +14,9 @@ const path = require("path");
 const RateLimit = require('express-rate-limit');
 const limiter = new RateLimit({
     windowMs: 5*60*1000, // 5 minutes
-    max: 100
+    max: 100,
+    message:
+        "Rate limit exceeded"
 });
 
 // middleware

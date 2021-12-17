@@ -7,6 +7,7 @@ import axios from "axios";
 import LinearProgress from "@mui/material/LinearProgress";
 
 import {CircularProgress} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -41,27 +42,30 @@ class PublicCourses extends Component {
             });
         });
 
-        axios.get(baseURL + `/api/admin/security/check-point`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Headers': 'x-access-token',
-                'x-access-token': localStorage.getItem("jwtToken")
-            }
-        }).then((res) => {
-            if (res.data.length === 1) {
-                let verification = res.data[0].verification;
-                if (verification === 0) {
-                    console.log("Unverified");
-                    this.setState({verification: false});
-                } else {
-                    console.log("Verified");
-                    this.setState({verification: true});
-                }
-            } else {
-                this.props.logoutUser();
-            }
-        }).catch((err) => {
-        });
+        /*
+                axios.get(baseURL + `/api/admin/security/check-point`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Headers': 'x-access-token',
+                        'x-access-token': localStorage.getItem("jwtToken")
+                    }
+                }).then((res) => {
+                    if (res.data.length === 1) {
+                        let verification = res.data.verification;
+                        if (verification === 0) {
+                            console.log("Unverified");
+                            this.setState({verification: false});
+                        } else {
+                            console.log("Verified");
+                            this.setState({verification: true});
+                        }
+                    } else {
+                        this.props.logoutUser();
+                    }
+                }).catch((err) => {
+                });
+                */
+
 
     }
 
@@ -78,11 +82,14 @@ class PublicCourses extends Component {
 
             return (
                 <div style={{backgroundColor: "#ffffff"}}>
+                    <Helmet>
+                        <title>Courses</title>
+                    </Helmet>
                     {this.state.loading === true ?
-                    <div style={{width: "100%"}}>
-                        <LinearProgress/>
-                    </div>
-                    : ""}
+                        <div style={{width: "100%"}}>
+                            <LinearProgress/>
+                        </div>
+                        : ""}
                     {/* start section */}
                     {
                         this.state.verification === false ?
@@ -95,7 +102,8 @@ class PublicCourses extends Component {
                             {/* here */}
                             <div className="container">
                                 <div className="row align-items-end margin-6-rem-bottom">
-                                    <div className="col-12 col-xl-6 col-lg-8 text-center text-lg-start wow animate__fadeIn">
+                                    <div
+                                        className="col-12 col-xl-6 col-lg-8 text-center text-lg-start wow animate__fadeIn">
                                 <span
                                     className="alt-font font-weight-500 text-salmon-rose text-uppercase d-block">Explore the best</span>
                                         <h5 className="alt-font font-weight-500 text-dark-purple line-height-46px m-lg-0 letter-spacing-minus-1px d-inline-block md-line-height-36px md-w-70 xs-w-100">
@@ -121,13 +129,26 @@ class PublicCourses extends Component {
                                                         className="bg-dark-purple text-small alt-font text-white text-uppercase position-absolute font-weight-500 top-minus-15px right-0px padding-5px-tb padding-20px-lr">
                                                         {course.fee === 0 ? "FREE" : "LKR " + course.fee.toString().split(".")[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ".00"}
                                                     </div>
-                                                <span
-                                                    className="alt-font font-weight-500 text-extra-medium text-extra-dark-gray d-block margin-10px-bottom">{course.name}</span>
+                                                    <span
+                                                        className="alt-font font-weight-500 text-extra-medium text-extra-dark-gray d-block margin-10px-bottom">{course.name}</span>
                                                     <div
                                                         className="w-100 h-1px bg-medium-light-gray margin-20px-bottom d-inline-block"/>
-                                                    <a className="alt-font font-weight-600 text-small text-dark-purple text-salmon-rose-hover text-uppercase d-flex align-items-center"
-                                                       href={"./course-payment/" + course._id} target={"_self"}>Watch course<i
-                                                        className="feather icon-feather-arrow-right icon-extra-small ms-auto"/></a>
+
+                                                    {user.email ?
+
+                                                        <a className="alt-font font-weight-600 text-small text-dark-purple text-salmon-rose-hover text-uppercase d-flex align-items-center"
+                                                           href={"./course-payment/" + course._id} target={"_self"}>Watch
+                                                            course<i
+                                                                className="feather icon-feather-arrow-right icon-extra-small ms-auto"/></a>
+
+                                                        :
+
+                                                        <a className="alt-font font-weight-600 text-small text-dark-purple text-salmon-rose-hover text-uppercase d-flex align-items-center"
+                                                           href={"/login"} target={"_self"}>Watch
+                                                            course<i
+                                                                className="feather icon-feather-arrow-right icon-extra-small ms-auto"/></a>
+                                                    }
+
                                                 </div>
                                             </div>
                                         )}
@@ -139,7 +160,8 @@ class PublicCourses extends Component {
                     </section>
                     {/* end section */}
                     {/* start section */}
-                    <section className="padding-100px-tb md-padding-75px-tb sm-padding-50px-tb wow animate__fadeIn footer-contact">
+                    <section
+                        className="padding-100px-tb md-padding-75px-tb sm-padding-50px-tb wow animate__fadeIn footer-contact">
                         <div className="container">
                             <div className="row justify-content-center">
                                 <div
@@ -196,7 +218,8 @@ class PublicCourses extends Component {
                                         src="docs/images/nav-logo-word.png"
                                         data-at2x="docs/images/nav-logo-word.png" alt=""/></a>
                                 </div>
-                                <div className="col-12 col-md-6 text-center last-paragraph-no-margin sm-margin-20px-bottom">
+                                <div
+                                    className="col-12 col-md-6 text-center last-paragraph-no-margin sm-margin-20px-bottom">
                                     <p className={"legal-footer-text"}>
                                         <strong>©</strong><span>{new Date().getFullYear()}</span> Votechno Institute -
                                         Powered by <a

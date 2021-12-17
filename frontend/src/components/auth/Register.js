@@ -8,6 +8,7 @@ import {TextField} from "@material-ui/core";
 //import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "react-router-dom/Link";
+import {Helmet} from "react-helmet";
 
 class Register extends Component {
     constructor() {
@@ -64,6 +65,9 @@ class Register extends Component {
 
         return (
             <div className={"mother login-mother reg-mother con-mid"}>
+                <Helmet>
+                    <title>Register</title>
+                </Helmet>
                 <div style={{
                     width: "100%",
                     height: "100%",

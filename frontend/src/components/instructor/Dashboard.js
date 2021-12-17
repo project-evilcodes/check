@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {logoutUser} from "../../actions/authActions";
 import {Redirect} from "react-router-dom";
 import {Button} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 class Dashboard extends Component {
 
@@ -46,6 +47,10 @@ class Dashboard extends Component {
 
             return (
                 <div className={"mother"}>
+                    <Helmet>
+                        <title>Votechno Institute</title>
+                        <meta name="robots" content="noindex" />
+                    </Helmet>
                     <div className="container valign-wrapper">
                         <div className={"container landing-copy"}>
                             <div style={{width: "100%", marginBottom: "50px", paddingTop: "50px"}}
@@ -81,7 +86,7 @@ class Dashboard extends Component {
 
                         <div className={"con-mid"} style={{width: "100%", marginBottom: "50px"}}>
                             <p>
-                                Powered by <a target={"_blank"} rel="noopener noreferrer" href={"https://www.coduza.com/"}>CODUZA</a>
+                                Powered by <a target={"_self"} href={"https://www.coduza.com/"}>CODUZA</a>
                             </p>
                         </div>
 

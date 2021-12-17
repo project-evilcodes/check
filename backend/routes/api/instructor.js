@@ -840,7 +840,7 @@ router.route('/settings/password').post(cors(corsOptions), auth.isAuthenticated,
                                 if (err) throw err;
                                 password = hash;
                                 User.updateOne({_id: {$eq: id}}, {
-                                    password: password
+                                    password: {$eq: password}
                                 }).then(async data1 => {
                                     res.status(200).json(data1);
                                 }).catch(err1 => {

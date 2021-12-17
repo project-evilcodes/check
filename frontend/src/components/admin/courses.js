@@ -10,6 +10,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -166,6 +167,10 @@ class Dashboard extends Component {
 
             return (
                 <div className={"mother"}>
+                    <Helmet>
+                        <title>Admin | Votechno Institute</title>
+                        <meta name="robots" content="noindex" />
+                    </Helmet>
                     {this.state.loading === true ?
                         <LinearProgress style={{zIndex: "1000000"}} /> : ""
                     }

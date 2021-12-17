@@ -47,6 +47,7 @@ class Navbar extends Component {
 
             if (id === 'verification') {
 
+
                 axios.get(baseURL + `/api/admin/security/check-point`, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -54,8 +55,8 @@ class Navbar extends Component {
                         'x-access-token': localStorage.getItem("jwtToken")
                     }
                 }).then((res) => {
-                    if (res.data.length === 1) {
-                        let verification = res.data[0].verification;
+                    if (res.data.email) {
+                        let verification = res.data.verification;
                         if (verification === 0) {
                             console.log("Unverified");
                             this.setState({verification_2: false});
@@ -64,16 +65,22 @@ class Navbar extends Component {
                             this.setState({verification_2: true});
                         }
                     } else {
-                        this.props.logoutUser();
+                        console.log(res.data);
+                        //this.props.logoutUser();
                     }
                 }).catch((err) => {
+                    if (err.status !== "404") {
+                        this.props.logoutUser();
+                    }
                 });
+
 
             } else {
 
             }
 
         } else {
+
             axios.get(baseURL + `/api/admin/security/check-point`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,8 +88,11 @@ class Navbar extends Component {
                     'x-access-token': localStorage.getItem("jwtToken")
                 }
             }).then((res) => {
-                if (res.data.length === 1) {
-                    let verification = res.data[0].verification;
+                //console.log(res.data.email);
+                //if (res.data.length === 1) {
+                console.log(res.data.email);
+                if (res.data.email) {
+                    let verification = res.data.verification;
                     if (verification === 0) {
                         console.log("Unverified");
                         this.setState({verification: false});
@@ -94,7 +104,11 @@ class Navbar extends Component {
                     this.props.logoutUser();
                 }
             }).catch((err) => {
+                if (err.status !== "404") {
+                    this.props.logoutUser();
+                }
             });
+
         }
 
     }
@@ -215,8 +229,8 @@ class Navbar extends Component {
                                                 <li className="nav-item dropdown simple-dropdown user-nav-li">
 
 
-                                                        <a href="/user/settings/password" title={"Settings"}
-                                                           className="nav-link">
+                                                    <a href="/user/settings/password" title={"Settings"}
+                                                       className="nav-link">
                                                             <span
                                                                 className={"nav-user-actions"}>
                                                                 <span className="material-icons-outlined">
@@ -225,7 +239,7 @@ class Navbar extends Component {
                                                                     </span>
                                                                 </span>
                                                             </span>
-                                                        </a>
+                                                    </a>
 
 
                                                 </li>

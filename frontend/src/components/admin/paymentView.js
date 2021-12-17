@@ -5,6 +5,7 @@ import {logoutUser} from "../../actions/authActions";
 import {Redirect} from "react-router-dom";
 import axios from "axios";
 import {CircularProgress} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -76,6 +77,10 @@ class Dashboard extends Component {
 
             return (
                 <div>
+                    <Helmet>
+                        <title>Admin | Votechno Institute</title>
+                        <meta name="robots" content="noindex" />
+                    </Helmet>
                     <div className={"paymentView-controls con-left"} style={{marginTop: "10px"}}>
                         <span className={"close-btn"} onClick={this.closeWindow}>
                             <i className="material-icons-outlined btn-icon"

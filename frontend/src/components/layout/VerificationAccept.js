@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {logoutUser} from "../../actions/authActions";
 import axios from "axios";
 import {CircularProgress} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -44,6 +45,10 @@ class Dashboard extends Component {
     render() {
         return (
             <div className={"mother"}>
+                <Helmet>
+                    <title>Votechno Institute</title>
+                    <meta name="robots" content="noindex" />
+                </Helmet>
                 <div className="container valign-wrapper">
                     <div className="row">
                         <div className="landing-copy col s12 center-align">

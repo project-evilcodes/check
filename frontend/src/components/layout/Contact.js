@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Helmet} from "react-helmet";
 
 
 class Contact extends Component {
@@ -6,7 +7,10 @@ class Contact extends Component {
         return (
             <div style={{backgroundColor: "#ffffff"}}>
 
-                
+
+                <Helmet>
+                    <title>Contact</title>
+                </Helmet>
 
                 {/* start header */}
                 <header className="header-with-topbar">
@@ -218,9 +222,8 @@ class Contact extends Component {
                                                                       className="text-salmon-rose-hover">+94 76 912
                                                     1314</a>
                                                 </p>
-                                                <p className="m-0"><a href="tel:+94112096066"
-                                                                      className="text-salmon-rose-hover">+94 11 209
-                                                    6066</a>
+                                                <p className="m-0"><a href="tel:+94713121314"
+                                                                      className="text-salmon-rose-hover">+94 71 312 1314</a>
                                                 </p>
                                             </div>
                                         </div>
@@ -233,7 +236,7 @@ class Contact extends Component {
                                             <div className="feature-box-content" style={{marginBottom: "30px"}}>
                                         <span
                                             className="text-dark-purple text-uppercase text-medium font-weight-500 alt-font margin-5px-bottom d-block">WhatsApp</span>
-                                                <p className="m-0"><a href="tel:+94759121314"
+                                                <p className="m-0"><a href="https://wa.me/+94759121314"
                                                                       className="text-salmon-rose-hover">+94 75 912
                                                     1314</a>
                                                 </p>

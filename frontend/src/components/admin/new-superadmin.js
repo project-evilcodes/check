@@ -7,6 +7,7 @@ import classnames from "classnames";
 import {TextField} from "@material-ui/core";
 import CircularProgress from "@mui/material/CircularProgress";
 import LinearProgress from "@mui/material/LinearProgress";
+import {Helmet} from "react-helmet";
 
 class Register extends Component {
     constructor() {
@@ -60,6 +61,10 @@ class Register extends Component {
 
         return (
             <div className={"mother"}>
+                <Helmet>
+                    <title>Admin | Votechno Institute</title>
+                    <meta name="robots" content="noindex" />
+                </Helmet>
                 {this.state.process === true ?
                     <LinearProgress style={{zIndex: "1000000"}} /> : ""
                 }

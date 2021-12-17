@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import {TextField} from "@material-ui/core";
 import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -106,6 +107,10 @@ class Reset extends Component {
 
             return (
                 <div className={"mother"}>
+                    <Helmet>
+                        <title>Votechno Institute</title>
+                        <meta name="robots" content="noindex" />
+                    </Helmet>
                     {this.state.isLoading === true ?
                         <LinearProgress style={{zIndex: "1000000"}} /> : ""
                     }

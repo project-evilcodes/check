@@ -5,6 +5,7 @@ import {logoutUser} from "../../actions/authActions";
 import axios from "axios";
 
 import {CircularProgress} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -58,6 +59,11 @@ class Landing extends Component {
     render() {
         return (
             <div style={{backgroundColor: "#ffffff"}}>
+
+
+                <Helmet>
+                    <title>Courses</title>
+                </Helmet>
 
                 
 

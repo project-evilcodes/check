@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {logoutUser} from "../../actions/authActions";
 import {Redirect} from "react-router-dom";
 import {Button} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 class Dashboard extends Component {
 
@@ -46,6 +47,10 @@ class Dashboard extends Component {
 
             return (
                 <div className={"mother"} style={{minHeight: "calc(100vh - 60px)"}}>
+                    <Helmet>
+                        <title>Admin | Votechno Institute</title>
+                        <meta name="robots" content="noindex" />
+                    </Helmet>
                     <div className="container valign-wrapper">
                         <div className={"container landing-copy"} style={{marginBottom: "50px"}}>
                             <div style={{width: "100%", marginBottom: "50px", paddingTop: "50px"}}

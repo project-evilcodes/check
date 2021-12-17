@@ -45,7 +45,7 @@ const {v4: uuidV4} = require('uuid');
 const Verification = require("../../models/Verifications");
 const nodemailer = require("nodemailer");
 
-const CORS_URL = require("../../config/keys").CORS_URL;
+const CORS_URL = keys.CORS_URL;
 // CORS
 const corsOptions = {
     origin: CORS_URL,
@@ -506,7 +506,7 @@ router.route('/lessons/new').post(cors(corsOptions), auth.isAuthenticated, (req,
         const courseId = req.query.id;
         //console.log(position);
 
-        Lessons.find({course: {$eq: courseId}, position: position}).limit(1).then(async res1 => {
+        Lessons.find({course: {$eq: courseId}, position: {$eq: position}}).limit(1).then(async res1 => {
             if (res1[0]) {
                 console.log("exist");
 
@@ -518,7 +518,7 @@ router.route('/lessons/new').post(cors(corsOptions), auth.isAuthenticated, (req,
                     for (let i = lastPosition; i >= position; i--) {
                         console.log("Before - Position: " + position + ", lastPosition: " + lastPosition + ", i: " + i)
 
-                        await Lessons.updateOne({course: {$eq: courseId}, position: {$eq: i}}, {
+                        await Lessons.updateOne({course: {$eq: courseId}, position: i}, {
                             position: (i + 1)
                         }).then(res3 => {
                             //console.log(res3);
@@ -756,7 +756,7 @@ router.route('/topics/new').post(cors(corsOptions), auth.isAuthenticated, async 
                         console.log("Last position: " + lastPosition);
                         for (let i = lastPosition; i >= position; i--) {
                             console.log("Before - Position: " + position + ", lastPosition: " + lastPosition + ", i: " + i)
-                            await Topics.updateOne({course: {$eq: course}, lesson: {$eq: id}, position: {$eq: i}}, {
+                            await Topics.updateOne({course: {$eq: course}, lesson: {$eq: id}, position: i}, {
                                 position: i + 1
                             }).then(async res3 => {
                                 //console.log(data);
@@ -921,7 +921,9 @@ router.route('/topic/update').post(cors(corsOptions), auth.isAuthenticated, (req
             return res.status(400).json(errors);
         }
 
+
         let id = req.query.id;
+
         let videoUrl = req.body.video
 
         let videoUrl2 = videoUrl.replace("https://youtu.be/", "https://www.youtube.com/embed/");
@@ -1040,7 +1042,7 @@ router.route('/super-admins').get(cors(corsOptions), auth.isAuthenticated, (req,
             $and: [
                 {role: 1},
                 {email: {$ne: 'admin@votechno.lk'}},
-                {email: {$ne: {$eq: req.email}}}
+                {email: {$ne: req.email}}
             ]
         }, (error, data) => {
             if (error) {
@@ -1159,7 +1161,7 @@ router.route('/delete-payment').post(cors(corsOptions), auth.isAuthenticated, (r
                             'border-radius: 10px;' +
                             '">' +
                             '<div style="width: 100%; min-height: 400px;">' +
-                            '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                            '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                             '<div>' +
                             '<h2>Hello, ' + data1.user + '</h2>' +
                             '<h1>' +
@@ -1291,7 +1293,7 @@ router.route('/approve-payment').post(cors(corsOptions), auth.isAuthenticated, (
                 let email = data2.email;
                 Courses.findOne({_id: {$eq: course}}).then(data3 => {
                     let newOnDemand = parseInt(data3.onDemand) + 1;
-                    Courses.updateOne({_id: {$eq: course}}, {onDemand: newOnDemand}).then(data4 => {
+                    Courses.updateOne({_id: {$eq: course}}, {onDemand: {$eq: newOnDemand}}).then(data4 => {
 
 
                         // register email function
@@ -1324,7 +1326,7 @@ router.route('/approve-payment').post(cors(corsOptions), auth.isAuthenticated, (
                                     'border-radius: 10px;' +
                                     '">' +
                                     '<div style="width: 100%; min-height: 400px;">' +
-                                    '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                                    '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                                     '<div>' +
                                     '<h2>Hello, ' + data2.user + '</h2>' +
                                     '<h1>' +
@@ -1412,7 +1414,7 @@ router.route('/disapprove-payment').post(cors(corsOptions), auth.isAuthenticated
                 Courses.findOne({_id: {$eq: course}}).then(data3 => {
                     let course_name = data3.name;
                     let newOnDemand = parseInt(data3.onDemand) - 1;
-                    Courses.updateOne({_id: {$eq: course}}, {onDemand: newOnDemand}).then(data4 => {
+                    Courses.updateOne({_id: {$eq: course}}, {onDemand: {$eq: newOnDemand}}).then(data4 => {
 
 
                         // register email function
@@ -1445,7 +1447,7 @@ router.route('/disapprove-payment').post(cors(corsOptions), auth.isAuthenticated
                                     'border-radius: 10px;' +
                                     '">' +
                                     '<div style="width: 100%; min-height: 400px;">' +
-                                    '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                                    '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                                     '<div>' +
                                     '<h2>Hello, ' + data2.user + '</h2>' +
                                     '<h1>' +
@@ -1564,7 +1566,7 @@ router.route('/users/disable').post(cors(corsOptions), auth.isAuthenticated, (re
                         'border-radius: 10px;' +
                         '">' +
                         '<div style="width: 100%; min-height: 400px;">' +
-                        '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                        '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                         '<div>' +
                         '<h2>Hello, ' + user.name + '</h2>' +
                         '<h1>' +
@@ -1654,7 +1656,7 @@ router.route('/users/enable').post(cors(corsOptions), auth.isAuthenticated, (req
                             'border-radius: 10px;' +
                             '">' +
                             '<div style="width: 100%; min-height: 400px;">' +
-                            '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                            '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                             '<div>' +
                             '<h2>Hello, ' + data2.name + '</h2>' +
                             '<h1>' +
@@ -1744,7 +1746,7 @@ router.route('/users/delete').post(cors(corsOptions), auth.isAuthenticated, (req
                                         'border-radius: 10px;' +
                                         '">' +
                                         '<div style="width: 100%; min-height: 400px;">' +
-                                        '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                                        '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                                         '<div>' +
                                         '<h2>Hello, ' + data2.name + '</h2>' +
                                         '<h1>' +
@@ -1905,7 +1907,7 @@ router.route('/settings/password').post(cors(corsOptions), auth.isAuthenticated,
 
 
             // Find user by email
-            User.findOne({_id: {$eq: id}, status: {$eq: 1}}).then(user => {
+            User.findOne({_id: {$eq: id}, status: 1}).then(user => {
                 // Check if user exists
                 if (!user) {
                     return res.status(404).json({curPassword: "User not found"});
@@ -1920,7 +1922,7 @@ router.route('/settings/password').post(cors(corsOptions), auth.isAuthenticated,
                                 if (err) throw err;
                                 password = hash;
                                 User.updateOne({_id: {$eq: id}}, {
-                                    password: password
+                                    password: {$eq: password}
                                 }).then(async data1 => {
                                     res.status(200).json(data1);
                                 }).catch(err1 => {
@@ -2363,7 +2365,18 @@ router.route('/past').get(cors(corsOptions), auth.isAuthenticated, (req, res) =>
 
 // User check point
 router.route('/security/check-point').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
-    User.find({_id: {$eq: req.id}, email: {$eq: req.email}, status: 1}).limit(1).then((data3) => {
+    User.findOne({_id: {$eq: req.id}, email: {$eq: req.email}, status: 1}).limit(1).then((data3) => {
+        res.status(200).json(data3)
+    }).catch((error3) => {
+        return res
+            .status(404)
+            .json({internalError: "Unexpected error occurred! Please try again."});
+    })
+})
+
+// User check point
+router.route('/verification/check-point').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
+    User.findOne({_id: {$eq: req.id}, email: {$eq: req.email}, status: 1}).limit(1).then((data3) => {
         res.status(200).json(data3)
     }).catch((error3) => {
         return res

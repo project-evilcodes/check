@@ -10,6 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import {Helmet} from "react-helmet";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -113,6 +114,10 @@ class Dashboard extends Component {
 
             return (
                 <div className={"mother"}>
+                    <Helmet>
+                        <title>Admin | Votechno Institute</title>
+                        <meta name="robots" content="noindex" />
+                    </Helmet>
                     {this.state.loading === true ?
                         <LinearProgress style={{zIndex: "1000000"}} /> : ""
                     }

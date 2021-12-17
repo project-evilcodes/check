@@ -8,6 +8,7 @@ import axios from "axios";
 import LinearProgress from "@mui/material/LinearProgress";
 import {CircularProgress, Typography} from "@material-ui/core";
 import Skeleton from "@mui/material/Skeleton";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -234,6 +235,9 @@ class Dashboard extends Component {
 
             return (
                 <div className={"mother"}>
+                    <Helmet>
+                        <title>Votechno Institute</title>
+                    </Helmet>
                     {this.state.loading === true ?
                         <LinearProgress style={{zIndex: "1000000"}} /> : ""
                     }

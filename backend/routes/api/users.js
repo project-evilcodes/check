@@ -15,6 +15,7 @@ const validateForgotInput = require("../../validation/forgot");
 
 // Load User model
 const User = require("../../models/User");
+//const Courses = require("../../models/Courses");
 const Forgot = require("../../models/Forgot");
 const Verification = require("../../models/Verifications");
 
@@ -101,7 +102,7 @@ router.post("/register", cors(corsOptions), (req, res) => {
                             'border-radius: 10px;' +
                             '">' +
                             '<div style="width: 100%; min-height: 400px;">' +
-                            '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                            '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                             '<div>' +
                             '<h2>Hello there,</h2>' +
                             '<p>' +
@@ -195,7 +196,7 @@ router.get("/accept-verification", cors(corsOptions), (req, res) => {
             return res.status(400).json({email: "Invalid verification link"});
         } else {
 
-            await User.findOne({email: {$eq: user.email}, status: {$eq: 1}}).then(async user65 => {
+            await User.findOne({email: {$eq: user.email}, status: 1}).then(async user65 => {
 
                 let email = user65.email;
                 console.log(email);
@@ -230,7 +231,7 @@ router.get("/accept-verification", cors(corsOptions), (req, res) => {
                             'border-radius: 10px;' +
                             '">' +
                             '<div style="width: 100%; min-height: 400px;">' +
-                            '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                            '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                             '<div>' +
                             '<h2>Hello, ' + user65.name + '</h2>' +
                             '<h1>' +
@@ -271,7 +272,7 @@ router.get("/accept-verification", cors(corsOptions), (req, res) => {
                     });
                 }
 
-                await User.updateOne({email: {$eq: email}}, {verification: {$eq: 1}}).then(verification => {
+                await User.updateOne({email: {$eq: email}}, {verification: 1}).then(verification => {
                     Verification.deleteMany({email: {$eq: email}}).then(async res33 => {
 
 
@@ -328,7 +329,7 @@ router.post("/login", cors(corsOptions), (req, res) => {
     const password = req.body.password;
 
     // Find user by email
-    User.findOne({email: {$eq: email}, status: {$eq: 1}}).then(user => {
+    User.findOne({email: {$eq: email}, status: 1}).then(user => {
         // Check if user exists
         if (!user) {
             return res.status(404).json({emailnotfound: "Email not found"});
@@ -400,7 +401,7 @@ router.post('/forgot', cors(corsOptions), (req, res) => {
         });
 
         // Find user by email
-        User.findOne({email: {$eq: email}, status: {$eq: 1}}).then(user => {
+        User.findOne({email: {$eq: email}, status: 1}).then(user => {
             // Check if user exists
             if (!user) {
                 return res.status(404).json({emailnotfound: "Email not found"});
@@ -437,7 +438,7 @@ router.post('/forgot', cors(corsOptions), (req, res) => {
                                 'border-radius: 10px;' +
                                 '">' +
                                 '<div style="width: 100%; min-height: 400px;">' +
-                                '<img src="https://ipfs.io/ipfs/QmaksBSuMU4FcFrPgCYtV9fiLxxSjGcMsEr5K8tZ24jSiE" style="width: 200px" alt="Votechno Logo">' +
+                                '<img src="https://ipfs.io/ipfs/QmRdRKtXDUJsb1qw9HxHBrvzu7s3QCB8KWqAnv9ULhS6m5" style="width: 200px" alt="Votechno Logo">' +
                                 '<div>' +
                                 '<h2>Hello, ' + user.name + '</h2>' +
                                 '<p>' +
@@ -546,7 +547,7 @@ router.get('/forgot-change-password', cors(corsOptions), (req, res) => {
 
             if (curTime >= reqDate && curTime <= expDate) {
                 let email = request.email;
-                User.findOne({email: {$eq: email}, status: {$eq: 1}}).then(user => {
+                User.findOne({email: {$eq: email}, status: 1}).then(user => {
                     // Check if user exists
                     if (!user) {
                         return res.status(200).json({msg: 2});
@@ -593,7 +594,7 @@ router.post('/reset-password', cors(corsOptions), (req, res) => {
 
                 console.log("Cur: " + curTime + ", Req: " + reqDate + ", Exp: " + expDate)
 
-                User.findOne({email: {$eq: email}, status: {$eq: 1}}).then(user => {
+                User.findOne({email: {$eq: email}, status: 1}).then(user => {
                     if (!user) {
                         // no user exist
                         console.log("No user exist");
@@ -618,7 +619,7 @@ router.post('/reset-password', cors(corsOptions), (req, res) => {
                                         password = hash;
                                         User.updateOne({
                                             email: {$eq: email},
-                                            status: {$eq: 1}
+                                            status: 1
                                         }, {password: password}).then(updateReq => {
                                             Forgot.deleteOne({email: {$eq: email}}).then(delReq => {
                                                 //return res.status(200).json("Password updated");

@@ -1,19 +1,24 @@
+//const {APP_URL} = require("./keys");
+//const {ADMIN_EMAIL} = require("./keys");
 require('dotenv').config();
 module.exports = {
 
     // Database
-    mongoURI: process.env.mongoURI, // Mumbai - AWS
+    mongoURI: process.env.mongoURI,
 
     // JWT Secret
     secretOrKey: process.env.secretOrKey,
 
     // App URL
-    APP_URL: process.env.APP_URL,
+    APP_URL: "",
 
     // CORS Policies
-    CORS_URL: "http://localhost:3000",
+    CORS_URL: "*",
+    //CORS_URL: "http://localhost:4000/",
+    //CORS_URL: "https://coduza-votechno-fe.herokuapp.com/",
+    //CORS_URL: "https://votechno.lk/",
 
-    //ADMIN_EMAIL: process.env.,
+    //ADMIN_EMAIL: "admin@votechno.lk",
 
     // Password recovery email and emails
     PAYMENT_REPORT_EMAIL: process.env.PAYMENT_REPORT_EMAIL,

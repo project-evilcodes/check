@@ -8,6 +8,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import {CircularProgress, Snackbar} from "@material-ui/core";
 import MuiAlert from "@mui/material/Alert";
 import MaterialTable from "mui-datatables";
+import {Helmet} from "react-helmet";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -187,14 +188,18 @@ class Dashboard extends Component {
                         </button>
                         <a href={'tel:' + payment.tel}
                            className={"btn pay-btn btn-full-dark"}>Voice call</a>
-                        <a href={'mailto:' + payment.email} target={"_blank"}
-                           className={"btn pay-btn btn-full-dark"} rel="noopener noreferrer">Email</a>
+                        <a href={'mailto:' + payment.email} rel="noopener noreferrer" target={"_blank"}
+                           className={"btn pay-btn btn-full-dark"}>Email</a>
                     </div>
                 }) : ""
             )
 
             return (
                 <div className={"mother"}>
+                    <Helmet>
+                        <title>Admin | Votechno Institute</title>
+                        <meta name="robots" content="noindex" />
+                    </Helmet>
                     {this.state.loading === true ?
                         <LinearProgress style={{zIndex: "1000000"}} /> : ""
                     }

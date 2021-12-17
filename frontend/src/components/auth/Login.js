@@ -7,6 +7,7 @@ import classnames from "classnames";
 //import LinearProgress from "@mui/material/LinearProgress";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "react-router-dom/Link";
+import {Helmet} from "react-helmet";
 
 class Login extends Component {
     constructor() {
@@ -62,6 +63,9 @@ class Login extends Component {
         return (
             <div className={"mother login-mother con-mid"}
                  style={{backgroundImage: "url(/docs/images/vectors/login.png)", minHeight: "100vh"}}>
+                <Helmet>
+                    <title>Login</title>
+                </Helmet>
                 <div style={{
                     width: "100%",
                     zIndex: "10",

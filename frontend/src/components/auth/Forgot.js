@@ -6,6 +6,7 @@ import {TextField} from "@material-ui/core";
 import CircularProgress from "@mui/material/CircularProgress";
 import LinearProgress from "@mui/material/LinearProgress";
 import Link from "react-router-dom/Link";
+import {Helmet} from "react-helmet";
 
 class Login extends Component {
     constructor() {
@@ -78,6 +79,10 @@ class Login extends Component {
         // this.setState({requestSent: "Password recovery link sent, Please check your email"})
         return (
             <div className={"mother"}>
+                <Helmet>
+                    <title>Votechno Institute</title>
+                    <meta name="robots" content="noindex" />
+                </Helmet>
                 {this.state.isLoading === true ?
                     <LinearProgress style={{zIndex: "1000000"}}/> : ""
                 }

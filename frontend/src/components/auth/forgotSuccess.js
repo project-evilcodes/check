@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {forgotPassword} from "../../actions/authActions";
 import LinearProgress from "@mui/material/LinearProgress";
+import {Helmet} from "react-helmet";
 
 class Login extends Component {
     constructor() {
@@ -21,6 +22,10 @@ class Login extends Component {
         // this.setState({requestSent: "Password recovery link sent, Please check your email"})
         return (
             <div className={"mother"}>
+                <Helmet>
+                    <title>Votechno Institute</title>
+                    <meta name="robots" content="noindex" />
+                </Helmet>
                 {this.state.isLoading === true ?
                     <LinearProgress style={{zIndex: "1000000"}}/> : ""
                 }

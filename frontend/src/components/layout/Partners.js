@@ -5,6 +5,7 @@ import {logoutUser} from "../../actions/authActions";
 import axios from "axios";
 
 import {CircularProgress} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -59,6 +60,10 @@ class Landing extends Component {
         return (
             <div style={{backgroundColor: "#ffffff"}}>
 
+
+                <Helmet>
+                    <title>Partners</title>
+                </Helmet>
                 
 
                 {/* start header */}
@@ -239,10 +244,16 @@ class Landing extends Component {
                         <div className="container" style={{marginTop: "80px"}}>
                             <div className="row align-items-end margin-6-rem-bottom">
                                 <div className="col-12 col-xl-6 col-lg-8 text-center text-lg-start wow animate__fadeIn">
-                                <span
-                                    className="alt-font font-weight-500 text-salmon-rose text-uppercase d-block">Explore the best</span>
+                                    {/*<span
+                                    className="alt-font font-weight-500 text-salmon-rose text-uppercase d-block">Partnership</span>*/}
                                     <h5 className="alt-font font-weight-500 text-dark-purple line-height-46px m-lg-0 letter-spacing-minus-1px d-inline-block md-line-height-36px md-w-70 xs-w-100">
-                                        Red Hat Courses by Cyber Academy</h5>
+                                        Partnership with Cybergate Linux Academy Malambe
+                                    </h5>
+                                    <br/>
+                                    <br/>
+                                    <p>
+                                        Every trainings below conducted by Cybergate Linux Academy with partnership with VoTechno Institute. Trainings delivered by qualified trainers and under a Red Hat certified training partner.
+                                    </p>
                                 </div>
                                 <div className="col-12 col-xl-6 col-lg-4 text-center text-lg-end wow animate__fadeIn">
                                     <a href="https://cyberacademy.lk/classes"

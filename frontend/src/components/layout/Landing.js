@@ -6,6 +6,7 @@ import axios from "axios";
 
 import Carousel from 'react-elastic-carousel'
 import {CircularProgress} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -75,6 +76,10 @@ class Landing extends Component {
         return (
             <div style={{backgroundColor: "#ffffff"}}>
 
+
+                <Helmet>
+                    <title>Votechno Institute</title>
+                </Helmet>
                 
 
                 {/* start header */}
@@ -531,6 +536,85 @@ class Landing extends Component {
                                 </div>
                             </div>
                             {/* end services item */}
+
+                            {/* start services item */}
+                            <div className="col md-margin-40px-bottom wow animate__fadeIn" data-wow-delay="0.2s">
+                                <div className="feature-box">
+                                    <div className="feature-box-icon margin-30px-bottom md-margin-30px-bottom">
+                                        <img
+                                            className="w-100px padding-10px-all"
+                                            src="docs/images/badges/logo-7.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end services item */}
+                            {/* start services item */}
+                            <div className="col md-margin-40px-bottom wow animate__fadeIn" data-wow-delay="0.2s">
+                                <div className="feature-box">
+                                    <div className="feature-box-icon margin-30px-bottom md-margin-30px-bottom">
+                                        <img
+                                            className="w-100px padding-10px-all"
+                                            src="docs/images/badges/logo-8.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end services item */}
+                            {/* start services item */}
+                            <div className="col md-margin-40px-bottom wow animate__fadeIn" data-wow-delay="0.2s">
+                                <div className="feature-box">
+                                    <div className="feature-box-icon margin-30px-bottom md-margin-30px-bottom">
+                                        <img
+                                            className="w-100px padding-10px-all"
+                                            src="docs/images/badges/logo-9.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end services item */}
+                            {/* start services item */}
+                            <div className="col md-margin-40px-bottom wow animate__fadeIn" data-wow-delay="0.2s">
+                                <div className="feature-box">
+                                    <div className="feature-box-icon margin-30px-bottom md-margin-30px-bottom">
+                                        <img
+                                            className="w-100px padding-10px-all"
+                                            src="docs/images/badges/logo-10.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end services item */}
+                            {/* start services item */}
+                            <div className="col md-margin-40px-bottom wow animate__fadeIn" data-wow-delay="0.2s">
+                                <div className="feature-box">
+                                    <div className="feature-box-icon margin-30px-bottom md-margin-30px-bottom">
+                                        <img
+                                            className="w-100px padding-10px-all"
+                                            src="docs/images/badges/logo-11.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end services item */}
+                            {/* start services item */}
+                            <div className="col md-margin-40px-bottom wow animate__fadeIn" data-wow-delay="0.2s">
+                                <div className="feature-box">
+                                    <div className="feature-box-icon margin-30px-bottom md-margin-30px-bottom">
+                                        <img
+                                            className="w-100px padding-10px-all"
+                                            src="docs/images/badges/logo-12.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end services item */}
+                            {/* start services item */}
+                            <div className="col md-margin-40px-bottom wow animate__fadeIn" data-wow-delay="0.2s">
+                                <div className="feature-box">
+                                    <div className="feature-box-icon margin-30px-bottom md-margin-30px-bottom">
+                                        <img
+                                            className="w-100px padding-10px-all"
+                                            src="docs/images/badges/logo-13.png" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end services item */}
+
                         </div>
                     </div>
                 </section>
