@@ -186,7 +186,7 @@ class Login extends Component {
                                                             <CircularProgress style={{
                                                                 color: "#ffffff",
                                                                 padding: "10px",
-                                                                marginTop: "-4px"
+                                                                marginTop: "-3px"
                                                             }}/> : "Sign in"
                                                         }
                                                     </button>
