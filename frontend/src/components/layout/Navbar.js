@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import {logoutUser} from "../../actions/authActions";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 //axios.defaults.baseURL = process.env.APP_URL
 const baseURL = require("../../config/keys").API_URL;
@@ -20,8 +21,15 @@ let id2 = pathname.split('/')[path_length - 2];
 
 class Navbar extends Component {
 
-    onLogoutClick = e => {
-        axios.post(baseURL + `/api/u/token-logout`, {}, {
+    state = {
+        verification: true,
+        verification_2: false,
+        logoutLoading: false
+    }
+
+    onLogoutClick = async e => {
+        this.setState({logoutLoading: true});
+        await axios.post(baseURL + `/api/u/token-logout`, {}, {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Headers': 'x-access-token',
@@ -29,17 +37,16 @@ class Navbar extends Component {
             }
         }).then((res) => {
             console.log("Logout");
+            this.setState({logoutLoading: false});
         }).catch((err) => {
             console.log(err);
+            this.setState({logoutLoading: false});
         });
+
         e.preventDefault();
         this.props.logoutUser();
-    };
 
-    state = {
-        verification: true,
-        verification_2: false
-    }
+    };
 
     componentDidMount = () => {
         if (id === ''
@@ -257,15 +264,25 @@ class Navbar extends Component {
                                     }
                                     {user.name ?
                                         <li className="nav-item dropdown simple-dropdown user-nav-li">
-                                            <a href="/" title={"Logout"} className="nav-link"
-                                               onClick={this.onLogoutClick}>
+                                            <button style={{maxHeight: "20px", backgroundColor: "transparent", outline: "none", border: "none"}} title={"Logout"} className="nav-link"
+                                                    onClick={this.onLogoutClick}>
+
+                                                {this.state.logoutLoading === true ?
+                                                    <CircularProgress style={{
+                                                        color: "#232323",
+                                                        padding: "10px",
+                                                        marginTop: "-10px"
+                                                    }}/>
+                                                    :
                                                     <span
                                                         className={"nav-user-actions"}>
                                                         <span className="material-icons-outlined">
                                                             logout
                                                         </span>
                                                     </span>
-                                            </a>
+                                                }
+
+                                            </button>
                                         </li>
                                         :
                                         <li className="nav-item dropdown simple-dropdown">
