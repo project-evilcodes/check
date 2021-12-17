@@ -1,10 +1,9 @@
 const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 const User = require("../models/User");
-
+const Token = require("../models/Tokens");
 
 module.exports = {
-
 
     isAuthenticated: function (req, res, next) {
         const token = req.headers['x-access-token'];
@@ -15,13 +14,11 @@ module.exports = {
             res.status(401).send('Unauthorized: No token provided');
         } else {
 
-
             jwt.verify(token, keys.secretOrKey, function (err, decoded) {
                 if (err) {
                     console.log(err, "error")
                     res.status(401).send('Unauthorized: Invalid token');
                 } else {
-
 
                     User.findOne({
                         _id: {$eq: decoded.id},
@@ -31,22 +28,36 @@ module.exports = {
 
                         if (data3) {
 
-                            req.id = decoded.id;
-                            req.name = decoded.name;
-                            req.tel = decoded.tel;
-                            req.email = decoded.email;
-                            req.role = decoded.role;
-                            next();
+                            Token.findOne({
+                                user: {$eq: decoded.id},
+                                token: {$eq: token},
+                                status: 1
+                            }).then((data4) => {
+
+                                if (data4) {
+
+                                    req.id = decoded.id;
+                                    req.name = decoded.name;
+                                    req.tel = decoded.tel;
+                                    req.email = decoded.email;
+                                    req.role = decoded.role;
+                                    next();
+
+                                } else {
+                                    return res.status(401).send('Unauthorized: Invalid token');
+                                }
+
+                            }).catch((error4) => {
+                                return res.status(401).send('Unauthorized: Invalid token');
+                            })
 
                         } else {
                             return res.status(401).send('Unauthorized: Invalid token');
                         }
 
-
                     }).catch((error3) => {
                         return res.status(401).send('Unauthorized: Invalid token');
                     })
-
 
                 }
             });

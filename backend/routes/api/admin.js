@@ -44,6 +44,7 @@ const multer = require('multer')
 const {v4: uuidV4} = require('uuid');
 const Verification = require("../../models/Verifications");
 const nodemailer = require("nodemailer");
+const Token = require("../../models/Tokens");
 
 const CORS_URL = keys.CORS_URL;
 // CORS
@@ -2365,9 +2366,20 @@ router.route('/past').get(cors(corsOptions), auth.isAuthenticated, (req, res) =>
 
 // User check point
 router.route('/security/check-point').get(cors(corsOptions), auth.isAuthenticated, (req, res) => {
-    User.findOne({_id: {$eq: req.id}, email: {$eq: req.email}, status: 1}).limit(1).then((data3) => {
-        res.status(200).json(data3)
-    }).catch((error3) => {
+    let token = req.headers['x-access-token'];
+    Token.findOne({user: {$eq: req.id}, token: {$eq: token}, status: 1}).limit(1).then((data4) => {
+        if (data4) {
+            User.findOne({_id: {$eq: req.id}, email: {$eq: req.email}, status: 1}).limit(1).then((data3) => {
+                res.status(200).json(data3)
+            }).catch((error3) => {
+                return res
+                    .status(404)
+                    .json({internalError: "Unexpected error occurred! Please try again."});
+            })
+        } else {
+            res.status(200).json({data3: ""});
+        }
+    }).catch((error4) => {
         return res
             .status(404)
             .json({internalError: "Unexpected error occurred! Please try again."});

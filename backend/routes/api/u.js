@@ -25,6 +25,7 @@ const Gallery = require("../../models/Gallery");
 const Verification = require("../../models/Verifications");
 const nodemailer = require("nodemailer");
 const keys = require("../../config/keys");
+const Token = require("../../models/Tokens");
 
 // validation
 //const validateCourseInput = require("../../validation/course");
@@ -393,30 +394,30 @@ router.route('/delete-payment').post(cors(corsOptions), auth.isAuthenticated, as
                 }
 
 
-            await Payments.deleteOne({course: {$eq: course}, user_id: {$eq: req.id}}).then(async data => {
-                res.json(data)
-                await fs.unlink(DIR + "/" + file, async err => {
-                    if (err) console.log(err);
-                    else {
+                await Payments.deleteOne({course: {$eq: course}, user_id: {$eq: req.id}}).then(async data => {
+                    res.json(data)
+                    await fs.unlink(DIR + "/" + file, async err => {
+                        if (err) console.log(err);
+                        else {
 
 
-                        await registerEmail().then(r77 => {
-                            console.log("Full success")
-                            res.status(200).json(r77)
-                        }).catch(errkk => {
-                            console.log(errkk);
-                            return res
-                                .status(404)
-                                .json({errorsendingemail: "Error while sending email"});
-                        })
+                            await registerEmail().then(r77 => {
+                                console.log("Full success")
+                                res.status(200).json(r77)
+                            }).catch(errkk => {
+                                console.log(errkk);
+                                return res
+                                    .status(404)
+                                    .json({errorsendingemail: "Error while sending email"});
+                            })
 
 
-                        console.log("File Deleted");
-                    }
-                });
-            }).catch(error => {
-                return (error)
-            })
+                            console.log("File Deleted");
+                        }
+                    });
+                }).catch(error => {
+                    return (error)
+                })
 
             }).catch(err96 => {
                 res.status(404).json(err96)
@@ -895,6 +896,20 @@ router.route('/redhat').get(cors(corsOptions), (req, res) => {
 router.route('/gallery').get(cors(corsOptions), (req, res) => {
 
     Gallery.find({}).sort({date: -1}).then((data3) => {
+        res.status(200).json(data3)
+    }).catch((error3) => {
+        console.log(error3);
+        return res
+            .status(404)
+            .json({internalError: "Unexpected error occurred! Please try again."});
+    })
+
+})
+
+// token delete
+router.route('/token-logout').post(cors(corsOptions), auth.isAuthenticated, (req, res) => {
+    let token = req.headers['x-access-token'];
+    Token.deleteOne({user: {$eq: req.id}, token: {$eq: token}}).then((data3) => {
         res.status(200).json(data3)
     }).catch((error3) => {
         console.log(error3);

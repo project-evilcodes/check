@@ -21,6 +21,17 @@ let id2 = pathname.split('/')[path_length - 2];
 class Navbar extends Component {
 
     onLogoutClick = e => {
+        axios.post(baseURL + `/api/u/token-logout`, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Headers': 'x-access-token',
+                'x-access-token': localStorage.getItem("jwtToken")
+            }
+        }).then((res) => {
+            console.log("Logout");
+        }).catch((err) => {
+            console.log(err);
+        });
         e.preventDefault();
         this.props.logoutUser();
     };
@@ -31,7 +42,6 @@ class Navbar extends Component {
     }
 
     componentDidMount = () => {
-
         if (id === ''
             || id === 'about'
             || id === 'contact'
@@ -73,7 +83,6 @@ class Navbar extends Component {
                         this.props.logoutUser();
                     }
                 });
-
 
             } else {
 

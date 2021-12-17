@@ -20,6 +20,7 @@ const Forgot = require("../../models/Forgot");
 const Verification = require("../../models/Verifications");
 
 const auth = require("../../middleware/check-auth");
+const Token = require("../../models/Tokens");
 const CORS_URL = require("../../config/keys").CORS_URL;
 
 // CORS
@@ -355,13 +356,25 @@ router.post("/login", cors(corsOptions), (req, res) => {
                         expiresIn: 31556926 // 1 year in seconds
                     },
                     (err, token) => {
-                        res.json({
-                            success: true,
-                            token: token
+
+                        const tokenLog = new Token({
+                            user: user.id,
+                            token: token,
+                            status: 1,
+                            date: new Date()
                         });
+
+                        tokenLog.save().then(data88 => {
+                            console.log("here");
+                            console.log(data88);
+                            res.json({
+                                success: true,
+                                token: token
+                            });
+                        }).catch(err88 => console.log(err88));
+
                     }
                 );
-
 
             } else {
                 return res
