@@ -365,8 +365,6 @@ router.post("/login", cors(corsOptions), (req, res) => {
                         });
 
                         tokenLog.save().then(data88 => {
-                            console.log("here");
-                            console.log(data88);
                             res.json({
                                 success: true,
                                 token: token
