@@ -36,12 +36,23 @@ module.exports = {
 
                                 if (data4) {
 
-                                    req.id = decoded.id;
-                                    req.name = decoded.name;
-                                    req.tel = decoded.tel;
-                                    req.email = decoded.email;
-                                    req.role = decoded.role;
-                                    next();
+                                    // set
+                                    let set_date = data4.date.setSeconds(data4.date.getSeconds());
+                                    // now
+                                    let cur_time = new Date();
+                                    let now_date = cur_time.setSeconds(cur_time.getSeconds())
+                                    // die
+                                    let die_date = data4.date.setSeconds(data4.date.getSeconds() + 31556926);
+                                    if (now_date <= die_date && now_date >= set_date) {
+                                        req.id = decoded.id;
+                                        req.name = decoded.name;
+                                        req.tel = decoded.tel;
+                                        req.email = decoded.email;
+                                        req.role = decoded.role;
+                                        next();
+                                    } else {
+                                        return res.status(401).send('Unauthorized: Invalid token');
+                                    }
 
                                 } else {
                                     return res.status(401).send('Unauthorized: Invalid token');
